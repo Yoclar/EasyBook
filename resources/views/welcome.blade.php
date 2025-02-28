@@ -26,11 +26,21 @@
                     @if (!Auth::check())
                         <a class="btn btn-success w-100 mb-2" href="{{ route('login') }}">Login</a>
                     @else
-                         <!-- Logout form -->
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-danger w-100 mb-2">Logout</button>
-                        </form>
+              
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a class="btn btn-success w-100 mb-2" href="{{ route('login') }}">Login</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger w-100 mb-2">Logout</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
                     @endif
                     
                 </p>

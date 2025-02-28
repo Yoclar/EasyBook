@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\ProviderProfile;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -32,21 +33,41 @@ class RegisterController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
-        $role = session('registration_role', 'customer');
-        $request->validate([
+        
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone' => ['nullable', 'string', 'max:20'],
-        ]);
+        ];
+        $role = session('registration_role', 'customer');
+        
+        if($role === 'provider')
+        {
+            $rules['service_name'] = 'required|string|max:255';
+            $rules['description'] = 'nullable|string';
+            $rules['average_price'] = 'nullable|integer|min:0';
+        }
+        $validated = $request->validate($rules);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->input('phone') ?: null,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'password' => Hash::make($validated['password']),
             'role' => $role,
         ]);
+
+        if($role === 'provider')
+        {
+            $providerProfile = ProviderProfile::create([
+                'user_id' =>$user->id,
+                'service_name' => $validated['service_name'],
+                'description' => $validated['description'] ?? '',
+                'average_price' => $validated['average_price']?? null,
+            ]);
+        }
+
 
         /* event(new Registered($user)); */
 
