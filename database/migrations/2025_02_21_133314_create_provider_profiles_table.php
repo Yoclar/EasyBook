@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('provider_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('profile_image')->nullable();
             $table->string('service_name');
             $table->text('description')->nullable();
-            $table->integer('price_range')->nullable();
             $table->timestamps();
         });
     }

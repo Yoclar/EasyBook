@@ -11,7 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <form method="POST" action="{{ route('register') }}">
         @csrf
-
+        @if (!empty($role) && $role === 'provider')
+        {{--! Picture goes here later, if I still have time  --}}
+        @endif
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -33,6 +35,19 @@
             <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"/>
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
+        @if (!empty($role) && $role === 'provider')
+            
+            <div class="mt-4">
+                <x-input-label for="service_name" :value="__('Service Name')" />
+                <x-text-input id="service_name" class="block mt-1 w-full" type="text" name="service_name" :value="old('service_name')"/>
+                <x-input-error :messages="$errors->get('service_name')" class="mt-2" />
+            </div>
+            <div class="mt-4">
+                <x-input-label for="descriptione" :value="__('Description')" />
+                <textarea id="description" name="description" class="mt-1 block w-full"></textarea>
+                <x-input-error :messages="$errors->get('description')" class="mt-2" />
+            </div>
+        @endif()
 
         <!-- Password -->
         <div class="mt-4">
