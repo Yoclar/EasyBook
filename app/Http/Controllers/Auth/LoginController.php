@@ -3,38 +3,89 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use App\Models\ProviderProfile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
+
+
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
-     * Where to redirect users after login.
+     * Redirect the user to the Google authentication page.
      *
-     * @var string
+     * @return \Illuminate\Http\RedirectResponse
      */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function redirectToGoogle(Request $request)
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        $role = $request->query('role');
+        session(['role' => $role]);
+        return Socialite::driver('google')->redirect();
     }
+
+    /**
+     * Obtain the user information from Google and log them in.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handleGoogleCallback()
+    {
+    try {
+        $user = Socialite::driver('google')->stateless()->user();
+        $role = session('role','customer');
+
+ /*        $validRoles = ['customer', 'provider'];
+        if (!in_array($role, $validRoles)) {
+            throw new \Exception('Invalid role');
+        } */
+        $existingUser = User::where('email', $user->getEmail())->first();
+        //TODO
+        //! if the user changes his/her password, in the profiles he/she can't sign in with that google account anymore
+        //! need a solution
+
+        if ($existingUser) {
+            Auth::login($existingUser);
+        } else {
+                $newUser = User::create([
+                    'name' => $user->getName(),
+                    'email' => $user->getEmail(),
+                    'password' => bcrypt(Str::random(32)),
+                    'role' => $role
+                ]);
+            if($role == 'provider')
+            {
+
+                $providerProfile = ProviderProfile::create([
+                    'user_id' => $newUser->id,
+                    'service_name' => $this->generateProviderName('Service_name')
+                ]);
+               
+            }
+
+           Auth::login($newUser); 
+        }
+
+        return redirect()->to('/dashboard');
+
+    } catch (\Exception $e) {
+        dd('Error creating provider profile:', $e->getMessage());
+        return redirect('login')->with('error', 'Google login failed or no email returned.');
+    }
+    }
+
+    private function generateProviderName($basestring)
+    {
+        do {
+            $uuid = UUid::uuid4()->toString();
+            $generatedServiceName = $basestring . '_' . substr($uuid, 0, 8);
+            $userExists = ProviderProfile::where('service_name', $generatedServiceName)->exists();
+        } while ($userExists);
+        return $generatedServiceName;
+    }
+
 }

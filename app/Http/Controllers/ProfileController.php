@@ -55,7 +55,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    //! finish the function
     public function updateProviderProfile(ProviderProfileUpdateRequest $request): RedirectResponse
     { 
 
