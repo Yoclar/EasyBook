@@ -25,10 +25,13 @@ jobs:
           tools: composer
       #3.Step: Install composer dependencies 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-      #4.Step: Running PHPStan
+        run: composer install --prefer-dist --no-progress 
+      #4. Step: Check if phpstan exists
+      - name: Check if vendor/bin/phpstan exists
+        run: ls -la vendor/bin/phpstan
+      #5.Step: Running PHPStan
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --memory-limit=512M
-      #5.Step: Running Laravel Pint
+      #6.Step: Running Laravel Pint
       - name: Run Laravel Pint
         run: vendor/bin/pint
