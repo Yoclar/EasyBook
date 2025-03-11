@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\ProviderProfile;
 use App\Http\Controllers\Controller;
+use App\Models\ProviderProfile;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -16,13 +16,13 @@ class RegisterController extends Controller
 {
     public function showRegistrationForm(Request $request)
     {
-       
-        if(Auth::check()){
+
+        if (Auth::check()) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            cookie()->queue(cookie()->forget('laravel_session')); 
+            cookie()->queue(cookie()->forget('laravel_session'));
         }
 
         $role = $request->query('role', 'customer');
@@ -33,7 +33,7 @@ class RegisterController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
-        
+
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
@@ -41,9 +41,8 @@ class RegisterController extends Controller
             'phone' => ['nullable', 'string', 'max:20'],
         ];
         $role = session('registration_role', 'customer');
-        
-        if($role === 'provider')
-        {
+
+        if ($role === 'provider') {
             $rules['service_name'] = 'required|string|max:255';
             $rules['description'] = 'nullable|string';
             $rules['average_price'] = 'nullable|integer|min:0';
@@ -58,16 +57,14 @@ class RegisterController extends Controller
             'role' => $role,
         ]);
 
-        if($role === 'provider')
-        {
+        if ($role === 'provider') {
             $providerProfile = ProviderProfile::create([
-                'user_id' =>$user->id,
+                'user_id' => $user->id,
                 'service_name' => $validated['service_name'],
                 'description' => $validated['description'] ?? '',
-                'average_price' => $validated['average_price']?? null,
+                'average_price' => $validated['average_price'] ?? null,
             ]);
         }
-
 
         /* event(new Registered($user)); */
 
@@ -83,6 +80,7 @@ class RegisterController extends Controller
         $password = $request->input('password');
 
         $entropy = $this->calculateEntropyScore($password);
+
         return response()->json(['entropy' => $entropy]);
     }
 
@@ -96,34 +94,31 @@ class RegisterController extends Controller
         if (preg_match('/[A-Z]/', $password)) {
             $charset += 26;
         }
-        if (preg_match('/[0-9]/', $password)){
+        if (preg_match('/[0-9]/', $password)) {
             $charset += 10;
         }
         if (preg_match('/[^a-zA-Z0-9]/', $password)) {
             $charset += 30;
         }
-        $entropy = round(log(pow($charset, strlen($password)),2));
-
+        $entropy = round(log(pow($charset, strlen($password)), 2));
 
         return $entropy;
     }
-    
 
+    /*  public function checkEmailIsTaken(Request $request)
+     {
+         $email = $request->input('email');
 
-   /*  public function checkEmailIsTaken(Request $request)
-    {
-        $email = $request->input('email');
+         $userFound = User::where('email', $email)->exists();
+         if ($userFound) {
+             return response()->json([
+                 'status' => 'failed',
+                 'message' => 'Email is already taken',
+             ]);
+         }
+         return response()->json([
+             'status' => 'success',
+         ]);
 
-        $userFound = User::where('email', $email)->exists();
-        if ($userFound) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Email is already taken',
-            ]);
-        }
-        return response()->json([
-            'status' => 'success',
-        ]);
-
-    } */
+     } */
 }

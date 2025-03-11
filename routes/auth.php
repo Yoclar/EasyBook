@@ -1,27 +1,25 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
 
-    
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
     Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
     Route::get('callback', [LoginController::class, 'handleGoogleCallback']);
 
-/*     Route::post('/checkEmailTaken', [RegisterController::class, 'checkEmailIsTaken'])->name('email.check'); */
+    /*     Route::post('/checkEmailTaken', [RegisterController::class, 'checkEmailIsTaken'])->name('email.check'); */
     Route::post('/calculate-entropy', [RegisterController::class, 'calculateEntropy'])->name('caculate-entropy');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
