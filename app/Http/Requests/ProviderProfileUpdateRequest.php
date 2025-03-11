@@ -30,7 +30,7 @@ class ProviderProfileUpdateRequest extends FormRequest
                 'max:50',
                 Rule::unique(ProviderProfile::class)->ignore($this->user()->providerProfile->id),
             ],
-            'description' => 'sometimes|string|max:300'
+            'description' => 'sometimes|string|max:300',
         ];
 
     }

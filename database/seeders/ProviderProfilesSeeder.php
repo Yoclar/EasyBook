@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\ProviderProfile;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class ProviderProfilesSeeder extends Seeder
 {
@@ -31,6 +30,6 @@ class ProviderProfilesSeeder extends Seeder
         foreach ($providers as $provider) {
             ProviderProfile::create($provider);
         }
-    
+
     }
 }

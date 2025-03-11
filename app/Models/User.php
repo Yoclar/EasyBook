@@ -22,33 +22,32 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
-        'role'
+        'role',
     ];
-    //Ha provider, akkor lehet egy ProviderProfile-ja.
+
+    // Ha provider, akkor lehet egy ProviderProfile-ja.
     public function providerProfile()
     {
         return $this->hasOne(ProviderProfile::class, 'user_id');
     }
 
-    //Több időpontfoglalása (appointments) lehet.
+    // Több időpontfoglalása (appointments) lehet.
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'user_id');
     }
 
-    //Ha provider, akkor több foglalást is kaphat (receivedAppointments).
+    // Ha provider, akkor több foglalást is kaphat (receivedAppointments).
     public function receivedAppointments()
     {
         return $this->hasMany(Appointment::class, 'provider_id');
     }
 
-    //Ha provider, akkor több munkaideje (workingHours) lehet.
+    // Ha provider, akkor több munkaideje (workingHours) lehet.
     public function workingHours()
     {
         return $this->hasMany(WorkingHour::class, 'provider_id');
     }
-
-
 
     /**
      * The attributes that should be hidden for serialization.
