@@ -9,26 +9,47 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      #1.Step: Cloning code
+      # 1. Step: Cloning code
       - name: Checkout code
         uses: actions/checkout@v4
-      #2. Step: Setting up PHP environment
+        with:
+          fetch-depth: 0 # Ez szükséges a git push-hoz
+
+      # 2. Step: Setting up PHP environment
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: composer
-      #3.Step: Install composer dependencies 
+
+      # 3. Step: Install composer dependencies 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress 
-      #4.Step: Running PHPStan
+
+      # 4. Step: Running PHPStan
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse app --memory-limit=512M
-      #5.Step: Running Laravel Pint
+
+      # 5. Step: Ensure clean working directory before running Pint
+      - name: Ensure clean working directory
+        run: git diff --exit-code || (echo "Working directory is dirty. Exiting..." && exit 1)
+
+      # 6. Step: Running Laravel Pint and committing changes
       - name: Run Laravel Pint
-        run: vendor/bin/pint
+        run: |
+          vendor/bin/pint --test || (
+            vendor/bin/pint && 
+            git config --local user.name "github-actions[bot]" && 
+            git config --local user.email "github-actions[bot]@users.noreply.github.com" && 
+            git add . && 
+            git commit -m "Apply Laravel Pint fixes" && 
+            git push origin HEAD
+          )
