@@ -33,13 +33,13 @@ class User extends Authenticatable
     //Több időpontfoglalása (appointments) lehet.
     public function appointments()
     {
-        return $this->hasMany(Appointments::class, 'user_id');
+        return $this->hasMany(Appointment::class, 'user_id');
     }
 
     //Ha provider, akkor több foglalást is kaphat (receivedAppointments).
     public function receivedAppointments()
     {
-        return $this->hasMany(Appointments::class, 'provider_id');
+        return $this->hasMany(Appointment::class, 'provider_id');
     }
 
     //Ha provider, akkor több munkaideje (workingHours) lehet.
