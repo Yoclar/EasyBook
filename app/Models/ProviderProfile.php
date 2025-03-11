@@ -8,6 +8,8 @@ class ProviderProfile extends Model
 {
     protected $fillable = ['user_id', 'profile_image', 'service_name', 'description'];
 
+
+    
     // Egy providernek pontosan egy ProviderProfile-ja van
     public function user()
     {
