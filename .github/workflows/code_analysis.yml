@@ -1,0 +1,34 @@
+name: Code Quality Checks
+
+# Workflow trigger: before every push and pull
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      #1.Step: Cloning code
+      - name: Checkout code
+        uses: actions/checkout@v4
+      #2. Step: Setting up PHP environment
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+      #3.Step: Install composer dependencies 
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      #4.Step: Running PHPStan
+      - name: Run PHPStan
+        run: vendero/bin/phpstan analyse --memory-limit=512M
+      #5.Step: Running Laravel Pint
+      - name: Run Laravel Pint
+        run: vendor/bin/pint
