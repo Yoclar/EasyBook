@@ -26,16 +26,9 @@ jobs:
       #3.Step: Install composer dependencies 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress 
-      #4. Step: Debug PHPStan (check if it's available and list contents)
-      - name: Debug PHPStan
-        run: |
-          echo "Listing contents of vendor/bin:"
-          ls -la vendor/bin
-          echo "Running PHPStan version check"
-          vendor/bin/phpstan --version
-      #5.Step: Running PHPStan
+      #4.Step: Running PHPStan
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse app --memory-limit=512M
-      #6.Step: Running Laravel Pint
+      #5.Step: Running Laravel Pint
       - name: Run Laravel Pint
         run: vendor/bin/pint
