@@ -35,7 +35,7 @@ jobs:
           vendor/bin/phpstan --version
       #5.Step: Running PHPStan
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --memory-limit=512M
+        run: vendor/bin/phpstan analyse app --memory-limit=512M
       #6.Step: Running Laravel Pint
       - name: Run Laravel Pint
         run: vendor/bin/pint
