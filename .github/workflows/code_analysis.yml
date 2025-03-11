@@ -28,7 +28,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
       #4.Step: Running PHPStan
       - name: Run PHPStan
-        run: vendero/bin/phpstan analyse --memory-limit=512M
+        run: vendor/bin/phpstan analyse --memory-limit=512M
       #5.Step: Running Laravel Pint
       - name: Run Laravel Pint
         run: vendor/bin/pint
