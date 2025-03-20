@@ -50,7 +50,7 @@ class LoginController extends Controller
                     'email' => $user->getEmail(),
                     'is_google_user' => true,
                     'password' => bcrypt(Str::random(32)),
-                    'role' => $role ?? 'customer'
+                    'role' => $role ?? 'customer',
                 ]);
                 if ($role == 'provider') {
 

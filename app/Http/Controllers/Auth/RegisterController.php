@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ProviderProfile;
 use App\Models\User;
+use App\Rules\AddressFormatRule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use App\Rules\AddressFormatRule;
 
 class RegisterController extends Controller
 {
@@ -47,8 +47,8 @@ class RegisterController extends Controller
             $rules['service_name'] = ['required', 'string', 'max:255'];
             $rules['description'] = ['nullable', 'string'];
             $rules['average_price'] = ['nullable', 'integer', 'min:0'];
-            $rules['address'] = ['nullable', new AddressFormatRule()];
-            $rules['website'] = ['nullable', 'url']; //change to active_url (only working link can be accepted) 
+            $rules['address'] = ['nullable', new AddressFormatRule];
+            $rules['website'] = ['nullable', 'url']; // change to active_url (only working link can be accepted)
         }
         $validated = $request->validate($rules);
 
@@ -67,10 +67,9 @@ class RegisterController extends Controller
                 'description' => $validated['description'] ?? '',
                 'address' => $validated['address'] ?? null,
                 'website' => $validated['website'] ?? null,
-                
+
             ]);
         }
-
 
         /*             $table->string('website')->nullable();
             $table->string('address')->nullable(); */

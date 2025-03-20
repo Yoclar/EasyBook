@@ -16,8 +16,7 @@ class AddressFormatRule implements ValidationRule
     {
         $pattern = '/^\d{4},\s[A-ZÁÉÍÓÖŐÚÜŰa-záéíóöőúüű]+,\s[A-ZÁÉÍÓÖŐÚÜŰa-záéíóöőúüű]+\s\w+\s\d+$/u';
 
-        if(!preg_match($pattern, $value))
-        {
+        if (! preg_match($pattern, $value)) {
             $fail("The {$attribute} must be in the format '1133, Budapest, Tisza utca 26'.");
         }
     }
