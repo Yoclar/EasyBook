@@ -37,11 +37,6 @@ class LoginController extends Controller
         try {
             $user = Socialite::driver('google')->stateless()->user();
             $role = session('role', 'customer');
-
-            /*        $validRoles = ['customer', 'provider'];
-                   if (!in_array($role, $validRoles)) {
-                       throw new \Exception('Invalid role');
-                   } */
             $existingUser = User::where('email', $user->getEmail())->first();
             // TODO
             // ! if the user changes his/her password, in the profiles he/she can't sign in with that google account anymore
@@ -53,13 +48,15 @@ class LoginController extends Controller
                 $newUser = User::create([
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
+                    'is_google_user' => true,
                     'password' => bcrypt(Str::random(32)),
-                    'role' => $role,
+                    'role' => $role ?? 'customer'
                 ]);
                 if ($role == 'provider') {
 
                     $providerProfile = ProviderProfile::create([
                         'user_id' => $newUser->id,
+                        'profile_image' => $user->getAvatar(),
                         'service_name' => $this->generateProviderName('Service_name'),
                     ]);
 

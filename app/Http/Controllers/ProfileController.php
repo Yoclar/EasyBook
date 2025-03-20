@@ -56,6 +56,7 @@ class ProfileController extends Controller
 
         $profile->fill($request->validated());
 
+ 
         if ($profile->isDirty()) {
             $profile->save();
         }

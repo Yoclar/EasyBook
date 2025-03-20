@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\ProviderProfile;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\AddressFormatRule;
 
 class ProviderProfileUpdateRequest extends FormRequest
 {
@@ -30,7 +31,9 @@ class ProviderProfileUpdateRequest extends FormRequest
                 'max:50',
                 Rule::unique(ProviderProfile::class)->ignore($this->user()->providerProfile->id),
             ],
-            'description' => 'sometimes|string|max:300',
+            'description' => 'sometimes|string|nullable|max:300',
+            'address' =>  ['sometimes','string','nullable','max:50', new AddressFormatRule()],
+            'website' => 'sometimes|url|nullable|max:30' //change to active_url (only working link can be accepted) 
         ];
 
     }
