@@ -23,7 +23,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
-        'is_google_user'
+        'is_google_user',
     ];
 
     // Ha provider, akkor lehet egy ProviderProfile-ja.
