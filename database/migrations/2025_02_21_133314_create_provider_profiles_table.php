@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('profile_image')->unique()->nullable();
             $table->string('service_name');
             $table->text('description')->nullable();
+            $table->string('website')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

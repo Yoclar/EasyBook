@@ -12,7 +12,7 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
         @if (!empty($role) && $role === 'provider')
-        {{--! Picture goes here later, if I still have time  --}}
+        {{--! Picture goes here later, if I still have time and marking mandatory fields with *  --}}
         @endif
         <!-- Name -->
         <div>
@@ -46,6 +46,28 @@
                 <x-input-label for="descriptione" :value="__('Description')" />
                 <textarea id="description" name="description" class="mt-1 block w-full"></textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
+            </div>
+            <div class="mt-4">
+                <x-input-label for="address" :value="__('Address (Optional)')" />
+                <x-text-input 
+                    id="address" 
+                    name="address" 
+                    class="mt-1 block w-full"  
+                    placeholder="1133, Budapest, Tisza utca 26"
+                />
+                <x-input-error class="mt-2" :messages="$errors->get('address')" />
+            </div>
+        
+            <div class="mt-4">
+                <x-input-label for="website" :value="__('Website (Optional)')" />
+                <x-text-input 
+                    type="url" 
+                    id="website" 
+                    name="website" 
+                    class="mt-1 block w-full" 
+                    placeholder="https://example.com"
+                />
+                <x-input-error class="mt-2" :messages="$errors->get('website')" />
             </div>
         @endif()
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProviderProfile extends Model
 {
-    protected $fillable = ['user_id', 'profile_image', 'service_name', 'description'];
+    protected $fillable = ['user_id', 'profile_image', 'service_name', 'description', 'website', 'address'];
 
     // Egy providernek pontosan egy ProviderProfile-ja van
     public function user()

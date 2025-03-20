@@ -43,9 +43,11 @@ class RegisterController extends Controller
         $role = session('registration_role', 'customer');
 
         if ($role === 'provider') {
-            $rules['service_name'] = 'required|string|max:255';
-            $rules['description'] = 'nullable|string';
-            $rules['average_price'] = 'nullable|integer|min:0';
+            $rules['service_name'] = ['required', 'string', 'max:255'];
+            $rules['description'] = ['nullable', 'string'];
+            $rules['average_price'] = ['nullable', 'integer', 'min:0'];
+            $rules['address'] = ['nullable', new AddressFormatRule()];
+            $rules['website'] = ['nullable', 'url']; //change to active_url (only working link can be accepted) 
         }
         $validated = $request->validate($rules);
 
@@ -62,9 +64,15 @@ class RegisterController extends Controller
                 'user_id' => $user->id,
                 'service_name' => $validated['service_name'],
                 'description' => $validated['description'] ?? '',
-                'average_price' => $validated['average_price'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'website' => $validated['website'] ?? null,
+                
             ]);
         }
+
+
+        /*             $table->string('website')->nullable();
+            $table->string('address')->nullable(); */
 
         /* event(new Registered($user)); */
 

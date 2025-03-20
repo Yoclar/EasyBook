@@ -6,7 +6,7 @@ use App\Models\ProviderProfile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class ProviderProfilesSeeder extends Seeder
+class ProviderProfileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,13 +18,15 @@ class ProviderProfilesSeeder extends Seeder
                 'user_id' => User::where('email', 'john@example.com')->first()->id, // kapcsolat a user_id-hez
                 'service_name' => 'Web Development',
                 'description' => 'Full-stack web development services.',
-                'profile_image' => 'profile_images/john.jpg',
+                'address' => '1061, Budapest, Andrássy út 39',
+                'website' => 'www.fullstack.hu'
             ],
             [
                 'user_id' => User::where('email', 'jane@example.com')->first()->id,
                 'service_name' => 'Graphic Design',
                 'description' => 'Creative graphic design for branding and marketing.',
-                'profile_image' => 'profile_images/jane.jpg',
+                'address' => '4025, Debrecen, Piac utca 20',
+                'website' => 'www.graphicdesign.com'
             ],
         ];
         foreach ($providers as $provider) {

@@ -26,6 +26,31 @@
         <x-input-error class="mt-2" :messages="$errors->get('description')" />
     </div>
 
+    <div class="mb-4">
+        <x-input-label for="address" :value="__('Address')" />
+        <x-text-input 
+            id="address" 
+            name="address" 
+            class="mt-1 block w-full" 
+            :value="old('address', $providerProfile->address ?? '')"
+            :placeholder="empty(old('address', $providerProfile->address ?? '')) ? '1133, Budapest, Tisza utca 26' : ''" 
+        />
+        <x-input-error class="mt-2" :messages="$errors->get('address')" />
+    </div>
+
+    <div class="mb-4">
+        <x-input-label for="website" :value="__('Website')" />
+        <x-text-input 
+            type="url" 
+            id="website" 
+            name="website" 
+            class="mt-1 block w-full" 
+            :value="old('website', $providerProfile->website ?? '')" 
+            :placeholder="empty(old('website', $providerProfile->website ?? '')) ? 'https://example.com' : ''"
+        />
+        <x-input-error class="mt-2" :messages="$errors->get('website')" />
+    </div>
+
     <div class="flex items-center gap-4">
         <x-primary-button>{{ __('Save') }}</x-primary-button>
 
