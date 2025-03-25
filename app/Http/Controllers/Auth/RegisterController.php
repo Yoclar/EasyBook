@@ -69,6 +69,17 @@ class RegisterController extends Controller
                 'website' => $validated['website'] ?? null,
 
             ]);
+            foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
+                WorkingHour::create([
+                    'provider_id' => $user->id,
+                    'day' => $day,
+                    'is_working_day' => ($day !== 'Saturday' && $day !== 'Sunday') ? 1 : 0,
+                    'open_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '08:00' : null,
+                    'close_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '16:00' : null,
+                ]);
+            }
+
+
         }
 
         /*             $table->string('website')->nullable();

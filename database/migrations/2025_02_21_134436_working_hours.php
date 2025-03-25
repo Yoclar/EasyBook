@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('provider_id')->constrained('users')->cascadeOnDelete();
             $table->enum('day', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-            $table->time('open_time');
-            $table->time('close_time');
+            $table->time('open_time')->nullable();
+            $table->time('close_time')->nullable();
+            $table->boolean('is_working_day')->default(true);
             $table->timestamps();
         });
     }
