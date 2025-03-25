@@ -80,7 +80,6 @@ class RegisterController extends Controller
                 ]);
             }
 
-
         }
 
         /*             $table->string('website')->nullable();
