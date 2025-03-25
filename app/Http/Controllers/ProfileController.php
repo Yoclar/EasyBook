@@ -73,16 +73,15 @@ class ProfileController extends Controller
             'working_day.*.is_working' => ['nullable', 'boolean'],
             'working_days.*.open_time' => ['nullable', 'date_format:H:i', 'required_if:working_days.*.is_working,1'],
             'working_days.*.close_time' => ['nullable', 'date_format:H:i', 'required_if:working_days.*.is_working,1',
-            function ($attribute, $value, $fail) use ($request){
-                $day = explode('.', $attribute)[1];
-                $openTime = $request->input("working_days.$day.open_time");
+                function ($attribute, $value, $fail) use ($request) {
+                    $day = explode('.', $attribute)[1];
+                    $openTime = $request->input("working_days.$day.open_time");
 
-                if($openTime && $value && strtotime($openTime) >= strtotime($value)) {
-                    $fail("The closing time for $day must be later than the opening time.");
-                }
-            }],         
+                    if ($openTime && $value && strtotime($openTime) >= strtotime($value)) {
+                        $fail("The closing time for $day must be later than the opening time.");
+                    }
+                }],
         ]);
-
 
         foreach ($request->input('working_days') as $day => $data) {
             WorkingHour::updateOrCreate(
@@ -90,10 +89,11 @@ class ProfileController extends Controller
                 [
                     'is_working_day' => isset($data['is_working']) ? 1 : 0,
                     'open_time' => isset($data['is_working']) ? $data['open_time'] : null,
-                    'close_time' => isset($data['is_working']) ? $data['close_time'] : null
+                    'close_time' => isset($data['is_working']) ? $data['close_time'] : null,
                 ]
             );
         }
+
         return redirect()->back()->with('success', 'Working hours updated');
     }
 
