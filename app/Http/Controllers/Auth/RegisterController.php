@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ProviderProfile;
 use App\Models\User;
+use App\Models\WorkingHour;
 use App\Rules\AddressFormatRule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
