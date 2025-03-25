@@ -12,4 +12,6 @@ class BookingController extends Controller
 
         return view('includes.booking', compact('provider'));
     }
+
+
 }
