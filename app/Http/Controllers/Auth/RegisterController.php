@@ -7,7 +7,6 @@ use App\Models\ProviderProfile;
 use App\Models\User;
 use App\Models\WorkingHour;
 use App\Rules\AddressFormatRule;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +85,7 @@ class RegisterController extends Controller
 
         session()->forget('registration_role');
         \Jeybin\Toastr\Toastr::error('Registration successful')->toast();
+
         return redirect(route('dashboard'));
     }
 
