@@ -21,7 +21,6 @@
             margin: 0 auto;
         }
     </style>
-
     <div class="d-flex justify-content-center mt-5">
         <div class="card text-center shadow-lg p-4" style="width: 50rem;">
             <img src="{{ 
@@ -57,7 +56,6 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -65,30 +63,81 @@
             </div>
         </div>
     </div>
-
+   
+    
+    
     <script>
-        var calendar;
+        document.addEventListener('DOMContentLoaded', async function () {
+            let calendar;
+            const modal = document.getElementById('exampleModal');
+            const calendarEl = document.getElementById('calendar');
     
-        document.getElementById('exampleModal').addEventListener('shown.bs.modal', function () {
-            var calendarEl = document.getElementById('calendar');
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'timeGridWeek,timeGridDay'
-                },
-                editable: true,
-                displayEventTime: true,
-            });
-            calendar.render();
-        });
+            if (!modal || !calendarEl) return;
     
-        document.getElementById('exampleModal').addEventListener('hidden.bs.modal', function () {
-            if (calendar) {
-                calendar.destroy();
+            // Business Hours betöltése AJAX segítségével
+            let businessHours = [];
+            const providerId = @json($provider->id);  // Az ID átadása a Blade-ből
+            console.log(providerId);  
+    
+            let formattedBusinessHours = []; // Globális változóként deklaráljuk
+
+            try {
+                // A providerId-t használjuk a fetch kéréshez, helyes változó névvel
+                const response = await fetch(`/get-business-hours/${providerId}`);
+                console.log(response);
+                const businessHours = await response.json();
+                console.log(businessHours);
+
+                // Változót itt töltjük meg adattal
+                formattedBusinessHours = businessHours.map(item => ({
+                    daysOfWeek: [item.daysOfWeek],
+                    startTime: item.startTime,
+                    endTime: item.endTime
+                }));
+                
+                console.log(formattedBusinessHours);
+            } catch (error) {
+                console.error('Hiba a businessHours lekérdezésénél:', error);
             }
+
+            modal.addEventListener('shown.bs.modal', function () {
+                if (!calendar) {
+                    calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'timeGridWeek',
+                        selectable: true,
+                        //editable: true,
+                        firstDay: 1,
+                        slotMinTime: '06:00:00',
+                        slotMaxTime: '22:00:00',
+
+                        businessHours: formattedBusinessHours, 
+                        selectConstraint: formattedBusinessHours,
+
+                        /* events: '/get-events', */
+
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'timeGridWeek,timeGridDay'
+                        },
+
+
+                    });
+
+                    calendar.render();
+                }
+            });
+    
+            modal.addEventListener('hidden.bs.modal', function () {
+                if (calendar) {
+                    calendar.destroy();
+                    calendar = null;
+                }
+            });
         });
     </script>
+    
+    
+    
     
 </x-app-layout>

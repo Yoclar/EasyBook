@@ -82,15 +82,10 @@ class RegisterController extends Controller
 
         }
 
-        /*             $table->string('website')->nullable();
-            $table->string('address')->nullable(); */
-
-        /* event(new Registered($user)); */
-
         Auth::login($user);
 
         session()->forget('registration_role');
-
+        \Jeybin\Toastr\Toastr::error('Registration successful')->toast();
         return redirect(route('dashboard'));
     }
 

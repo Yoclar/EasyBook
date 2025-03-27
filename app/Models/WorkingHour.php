@@ -9,8 +9,8 @@ class WorkingHour extends Model
     protected $fillable = ['provider_id', 'day', 'is_working_day', 'open_time', 'close_time'];
 
     // Egy WorkingHour egy provider-hez tartozik.
-    public function provider()
+    public function providerProfile()
     {
-        return $this->belongsTo(User::class, 'provider_id');
+        return $this->belongsTo(ProviderProfile::class, 'provider_id');
     }
 }
