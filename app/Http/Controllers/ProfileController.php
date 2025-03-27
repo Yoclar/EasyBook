@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\ProviderProfileUpdateRequest;
 use App\Models\User;
-use App\Models\ProviderProfile;
 use App\Models\WorkingHour;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -23,10 +21,10 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
-    
+
         $providerProfile = null;
         $workingHours = null;
-    
+
         if ($user->role === 'provider') {
             $providerProfile = $user->providerProfile;
             $workingHours = WorkingHour::where('provider_id', $providerProfile->id)->get()->keyBy('day');
@@ -54,6 +52,7 @@ class ProfileController extends Controller
 
         $user->save();
         \Jeybin\Toastr\Toastr::error('Your profile updated successfully')->toast();
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -68,6 +67,7 @@ class ProfileController extends Controller
             $profile->save();
         }
         \Jeybin\Toastr\Toastr::error('Your providerprofile updated successfully')->toast();
+
         return Redirect::route('profile.edit')->with('status', 'provider-profile-updated');
     }
 
@@ -78,33 +78,34 @@ class ProfileController extends Controller
 
             $data['open_time'] = substr($data['open_time'], 0, 5); // Eltávolítja a másodperceket
             $data['close_time'] = substr($data['close_time'], 0, 5); // Eltávolítja a másodperceket
-                   // Validáció
-                   $validator = Validator::make($data, [
-                    'is_working' => 'sometimes|boolean',
-                    'open_time' => ['sometimes', 'required_if:is_working,1','nullable', 'date_format:H:i'],
-                    'close_time' => ['sometimes', 'required_if:is_working,1','nullable', 'date_format:H:i'],
-                ]);
-            
-                if ($validator->fails()) {
-                    \Jeybin\Toastr\Toastr::error('Something was not in the correct format.')->toast();
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
+            // Validáció
+            $validator = Validator::make($data, [
+                'is_working' => 'sometimes|boolean',
+                'open_time' => ['sometimes', 'required_if:is_working,1', 'nullable', 'date_format:H:i'],
+                'close_time' => ['sometimes', 'required_if:is_working,1', 'nullable', 'date_format:H:i'],
+            ]);
+
+            if ($validator->fails()) {
+                \Jeybin\Toastr\Toastr::error('Something was not in the correct format.')->toast();
+
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
             // Idő konverzió
-            if($data['open_time'] && $data['close_time'])
-            {
-                $convertedOpenTimeArray = explode(":", $data['open_time']);
+            if ($data['open_time'] && $data['close_time']) {
+                $convertedOpenTimeArray = explode(':', $data['open_time']);
                 $convertedCloseTimeArray = explode(':', $data['close_time']);
-                $convertedOpenTimeToInt = intval($convertedOpenTimeArray[0])*60 + intval($convertedOpenTimeArray[1]);
-                $convertedCloseTimeToInt = intval($convertedCloseTimeArray[0]*60) + intval($convertedCloseTimeArray[1]);
+                $convertedOpenTimeToInt = intval($convertedOpenTimeArray[0]) * 60 + intval($convertedOpenTimeArray[1]);
+                $convertedCloseTimeToInt = intval($convertedCloseTimeArray[0] * 60) + intval($convertedCloseTimeArray[1]);
                 // Időpontok ellenőrzése
-                
-                if ($convertedCloseTimeToInt <= $convertedOpenTimeToInt) { 
+
+                if ($convertedCloseTimeToInt <= $convertedOpenTimeToInt) {
                     \Jeybin\Toastr\Toastr::error('Close time cannot be earlier than open time.')->toast();
+
                     return redirect()->back();
                 }
             }
-         
+
             // Adatok mentése
             WorkingHour::updateOrCreate(
                 ['provider_id' => auth()->user()->providerProfile->id, 'day' => $day],
@@ -115,9 +116,10 @@ class ProfileController extends Controller
                 ]
             );
         }
-        
+
         // Toastr átirányítás (ha be van állítva a toastr)
         \Jeybin\Toastr\Toastr::success('Working hour saved successfully')->toast();
+
         return redirect()->back();
 
     }

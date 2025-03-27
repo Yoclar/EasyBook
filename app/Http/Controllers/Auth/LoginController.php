@@ -62,7 +62,7 @@ class LoginController extends Controller
                     ]);
                     foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                         WorkingHour::create([
-                            'provider_id' =>  $providerProfile->id,
+                            'provider_id' => $providerProfile->id,
                             'day' => $day,
                             'is_working_day' => ($day !== 'Saturday' && $day !== 'Sunday') ? 1 : 0,
                             'open_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '08:00' : null,
@@ -74,13 +74,11 @@ class LoginController extends Controller
 
                 Auth::login($newUser);
             }
-            if($role == 'provider')
-            {
+            if ($role == 'provider') {
                 \Jeybin\Toastr\Toastr::info('Please edit your profile details')->toast();
+
                 return redirect()->to('/dashboard');
-            }
-            else
-            {
+            } else {
                 return redirect()->to('/dashboard');
             }
 
