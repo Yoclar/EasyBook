@@ -13,4 +13,8 @@ class ProviderProfile extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function workingHours()
+    {
+        return $this->hasMany(WorkingHour::class);
+    }
 }

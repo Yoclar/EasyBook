@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/providers', [ProviderListingController::class, 'index'])->name('index');
     Route::get('/provider/{id}/booking', [BookingController::class, 'index'])->name('booking.index');
     Route::post('/provider/{id}/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/get-business-hours/{providerId}', [BookingController::class, 'getBusinessHours']);
 
 });
 
