@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('provider_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('provider_id')->constrained('provider_profiles')->cascadeOnDelete();
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->enum('status', ['pending', 'confirmed', 'canceled']);
