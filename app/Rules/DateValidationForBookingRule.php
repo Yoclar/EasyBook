@@ -2,10 +2,9 @@
 
 namespace App\Rules;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Carbon\Carbon;
-
 
 class DateValidationForBookingRule implements ValidationRule
 {
@@ -18,10 +17,9 @@ class DateValidationForBookingRule implements ValidationRule
     {
         $now = Carbon::now();
         $bookingTime = Carbon::parse($value);
-        if($bookingTime->lessThan($now))
-        {
+        if ($bookingTime->lessThan($now)) {
             \Jeybin\Toastr\Toastr::error('You cannot book for past time.')->timeOut(5000)->toast();
-            $fail("You cannot book for past time.");
+            $fail('You cannot book for past time.');
         }
     }
 }

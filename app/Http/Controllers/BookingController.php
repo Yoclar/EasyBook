@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\ProviderProfile;
 use App\Models\WorkingHour;
-use Illuminate\Http\Request;
-use App\Models\Appointment;
-use Carbon\Carbon;
-use Illuminate\Validation\Rules;
 use App\Rules\DateValidationForBookingRule;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
@@ -49,46 +48,44 @@ class BookingController extends Controller
 
     }
 
-
-    public function store(Request $request,$id)
+    public function store(Request $request, $id)
     {
 
         $validated = $request->validate([
-            'name' => ['required','exists:users,name'], //useless here :)
+            'name' => ['required', 'exists:users,name'], // useless here :)
             'start_time' => ['required', 'date', new DateValidationForBookingRule],
-            'end_time' => ['required', 'date', new DateValidationForBookingRule]
-        ]); 
-        $start_time = Carbon::parse($validated['start_time']); 
+            'end_time' => ['required', 'date', new DateValidationForBookingRule],
+        ]);
+        $start_time = Carbon::parse($validated['start_time']);
         $end_time = Carbon::parse($validated['end_time']);
 
-        if($end_time->lessThan($start_time))
-        {
+        if ($end_time->lessThan($start_time)) {
             \Jeybin\Toastr\Toastr::error('End time must be after start time.')->toast();
+
             return redirect()->back();
         }
 
-        $isBooked = Appointment::where(function($query) use ($start_time,$end_time) {
+        $isBooked = Appointment::where(function ($query) use ($start_time, $end_time) {
             $query->whereBetween('start_time', [$start_time, $end_time])
-            ->orWhereBetween('end_time', [$start_time, $end_time])
-            ->orWhere(function ($query) use ($start_time, $end_time) {
-                $query->where('start_time', '<', $start_time)
+                ->orWhereBetween('end_time', [$start_time, $end_time])
+                ->orWhere(function ($query) use ($start_time, $end_time) {
+                    $query->where('start_time', '<', $start_time)
                         ->where('end_time', '>', $end_time);
-            });
+                });
         })->exists();
 
-        /*SQL EQUIVALENT  */
+        /* SQL EQUIVALENT */
         /* SELECT * FROM appointments
-            WHERE 
+            WHERE
             (start_time BETWEEN '2025-04-01 10:00:00' AND '2025-04-01 11:00:00')
             OR (end_time BETWEEN '2025-04-01 10:00:00' AND '2025-04-01 11:00:00')
             OR (start_time < '2025-04-01 10:00:00' AND end_time > '2025-04-01 11:00:00')
             LIMIT 1;
         */
 
-
-        if($isBooked)
-        {
+        if ($isBooked) {
             \Jeybin\Toastr\Toastr::error('This appointment is already booked.')->timeOut(5000)->toast();
+
             return redirect()->back();
         }
 
@@ -97,19 +94,19 @@ class BookingController extends Controller
             'provider_id' => $id,
             'start_time' => $start_time,
             'end_time' => $end_time,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
         \Jeybin\Toastr\Toastr::success('Appointment created successfully')->toast();
-        return view('includes.appointmentBookedInfo'); //egy másik oldalra kell majd redirect
+
+        return view('includes.appointmentBookedInfo'); // egy másik oldalra kell majd redirect
 
     }
-
-
 
     public function getAppointments($providerId)
     {
         $appointments = Appointment::where('provider_id', $providerId)->get();
-        return response()->json($appointments->map(function ($appointments){
+
+        return response()->json($appointments->map(function ($appointments) {
             return [
                 'id' => $appointments->id,
                 'user_id' => $appointments->user_id,
