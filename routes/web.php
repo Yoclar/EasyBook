@@ -23,8 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/setWorkingHours', [ProfileController::class, 'setWorkingHours'])->name('setWorkingHours');
     Route::get('/providers', [ProviderListingController::class, 'index'])->name('index');
     Route::get('/provider/{id}/booking', [BookingController::class, 'index'])->name('booking.index');
-    Route::post('/provider/{id}/booking', [BookingController::class, 'store'])->name('booking.store');
+/*     Route::post('/provider/{id}/booking', [BookingController::class, 'store'])->name('booking.store'); */
     Route::get('/get-business-hours/{providerId}', [BookingController::class, 'getBusinessHours']);
+    Route::post('/create-booking/{id}', [BookingController::class, 'store'])->name('store');
+    Route::get('/get-bookings/{providerId}', [BookingController::class, 'getAppointments']);
 
 });
 
