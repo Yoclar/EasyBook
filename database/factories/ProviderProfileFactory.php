@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Factories;
+
 use App\Models\ProviderProfile;
 use App\Models\User;
 use App\Models\WorkingHour;
@@ -19,21 +20,22 @@ class ProviderProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create(['role' => 'provider'])->id, 
+            'user_id' => User::factory()->create(['role' => 'provider'])->id,
             'service_name' => fake()->jobTitle(),
             'description' => fake()->sentence(),
             'address' => fake()->address(),
             'website' => fake()->domainName(),
         ];
     }
+
     public function configure()
     {
         return $this->afterCreating(function (ProviderProfile $provider) {
             $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
             foreach ($days as $day) {
-                $isWorkingDay = !in_array($day, ['Saturday', 'Sunday']);
-                
+                $isWorkingDay = ! in_array($day, ['Saturday', 'Sunday']);
+
                 WorkingHour::create([
                     'provider_id' => $provider->id,
                     'day' => $day,

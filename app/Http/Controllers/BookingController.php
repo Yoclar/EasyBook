@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentBooked;
 use App\Models\Appointment;
 use App\Models\ProviderProfile;
 use App\Models\WorkingHour;
@@ -9,7 +10,6 @@ use App\Rules\DateValidationForBookingRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AppointmentBooked;
 
 class BookingController extends Controller
 {
@@ -68,14 +68,14 @@ class BookingController extends Controller
         }
 
         $isBooked = Appointment::where('provider_id', $id) // Csak az adott provider foglalásait nézi
-        ->where(function ($query) use ($start_time, $end_time) {
-            $query->whereBetween('start_time', [$start_time, $end_time])
-                ->orWhereBetween('end_time', [$start_time, $end_time])
-                ->orWhere(function ($query) use ($start_time, $end_time) {
-                    $query->where('start_time', '<', $start_time)
-                        ->where('end_time', '>', $end_time);
-                });
-        })->exists();
+            ->where(function ($query) use ($start_time, $end_time) {
+                $query->whereBetween('start_time', [$start_time, $end_time])
+                    ->orWhereBetween('end_time', [$start_time, $end_time])
+                    ->orWhere(function ($query) use ($start_time, $end_time) {
+                        $query->where('start_time', '<', $start_time)
+                            ->where('end_time', '>', $end_time);
+                    });
+            })->exists();
 
         /* SQL EQUIVALENT */
         /* SELECT * FROM appointments
@@ -102,6 +102,7 @@ class BookingController extends Controller
         \Jeybin\Toastr\Toastr::success('Appointment created successfully')->toast();
 
         Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('service_name'), $start_time, $end_time));
+
         return redirect()->route('booking.appointmentBookedInfo');
 
     }
@@ -121,6 +122,7 @@ class BookingController extends Controller
         }));
 
     }
+
     public function getAppointmentsforCustomers($userId)
     {
         $appointments = Appointment::where('user_id', $userId)->get();
