@@ -20,16 +20,29 @@
             margin: 0 auto;
         }
     </style>
+    @php
+    $imageUrl = asset('storage/profile_images/placeholder-profile-img.jpg'); // Alapértelmezett kép
+
+    if ($provider->profile_image) {
+        $imageUrl = filter_var($provider->profile_image, FILTER_VALIDATE_URL) 
+            ? $provider->profile_image 
+            : asset('storage/' . $provider->profile_image);
+    }
+    @endphp
     <div class="d-flex justify-content-center mt-5">
         <div class="card text-center shadow-lg p-4" style="width: 50rem;">
-            <img src="{{ 
-                $provider->profile_image 
+            <img src="{{ $imageUrl }}" 
+            class="card-img-top rounded-circle mx-auto mt-3" 
+            style="width: 150px; height: 150px; object-fit: cover;">
+
+                 {{--TODO user can change picture later --}}
+                 {{--   $provider->profile_image 
                     ? (filter_var($provider->profile_image, FILTER_VALIDATE_URL) 
                         ? $provider->profile_image 
                         : asset('storage/' . $provider->profile_image)) 
                     : asset('storage/profile_images/placeholder-profile-img.jpg') }}" 
                  class="card-img-top rounded-circle mx-auto mt-3" 
-                 style="width: 150px; height: 150px; object-fit: cover;">
+                 style="width: 150px; height: 150px; object-fit: cover;"> --}}
     
             <div class="card-body">
                 <h1 class="display-6 card-title">{{ $provider->service_name }}</h1>
@@ -95,6 +108,7 @@
     
     <script>
         let calendar; // Globális változó a naptárhoz
+        const providerId = @json($provider->id);
     
         document.addEventListener('DOMContentLoaded', async function () {
             const modal = document.getElementById('exampleModal');
@@ -105,7 +119,6 @@
                 return;
             }
     
-            const providerId = @json($provider->id);
             let formattedBusinessHours = [];
     
             async function fetchBusinessHours() {
@@ -162,9 +175,8 @@
                         },
                         events: async function (fetchInfo, successCallback, failureCallback) {
                             try {
-                                const providerId = @json($provider->id);
-                                console.log("Lekérdezett időszak:", fetchInfo.startStr, "->", fetchInfo.endStr); // Debug
-                                const response = await fetch(`/get-bookings/${providerId}`);
+
+                                const response = await fetch(`/get-bookings/provider/${providerId}`);
                                 const events = await response.json();
 
                                 const formattedEvents = events.map(event => {
@@ -231,7 +243,7 @@
         function formatDateToLocal(date) {
             let offset = date.getTimezoneOffset(); // Az időzóna eltérése percekben
             let localDate = new Date(date.getTime() - offset * 60000); // Időeltolás korrigálása
-            return localDate.toISOString().slice(0, 16); // Helyes formátum
+            return localDate.toISOString().slice(0, 16) ; // Helyes formátum
         }
     </script>
     

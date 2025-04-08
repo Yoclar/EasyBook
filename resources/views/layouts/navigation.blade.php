@@ -41,8 +41,11 @@
                         <x-responsive-nav-link :href="route('index')">
                             {{ __('Providers') }}
                         </x-responsive-nav-link>  
-
                         @endif
+                        <x-responsive-nav-link :href="route('myBookingsIndex')">
+                            {{ __('My Appointments') }}
+                        </x-responsive-nav-link>  
+
                        
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

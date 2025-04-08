@@ -75,7 +75,7 @@ class LoginController extends Controller
                 Auth::login($newUser);
             }
             if ($role == 'provider') {
-                \Jeybin\Toastr\Toastr::info('Please edit your profile details')->toast();
+                \Jeybin\Toastr\Toastr::info('Please edit your profile details')->timeOut(5000)->toast();
 
                 return redirect()->to('/dashboard');
             } else {

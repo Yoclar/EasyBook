@@ -8,6 +8,8 @@ use App\Models\WorkingHour;
 use App\Rules\DateValidationForBookingRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentBooked;
 
 class BookingController extends Controller
 {
@@ -65,7 +67,8 @@ class BookingController extends Controller
             return redirect()->back();
         }
 
-        $isBooked = Appointment::where(function ($query) use ($start_time, $end_time) {
+        $isBooked = Appointment::where('provider_id', $id) // Csak az adott provider foglalásait nézi
+        ->where(function ($query) use ($start_time, $end_time) {
             $query->whereBetween('start_time', [$start_time, $end_time])
                 ->orWhereBetween('end_time', [$start_time, $end_time])
                 ->orWhere(function ($query) use ($start_time, $end_time) {
@@ -98,11 +101,12 @@ class BookingController extends Controller
         ]);
         \Jeybin\Toastr\Toastr::success('Appointment created successfully')->toast();
 
-        return view('includes.appointmentBookedInfo'); // egy másik oldalra kell majd redirect
+        Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('service_name'), $start_time, $end_time));
+        return redirect()->route('booking.appointmentBookedInfo');
 
     }
 
-    public function getAppointments($providerId)
+    public function getAppointmentsforProviders($providerId)
     {
         $appointments = Appointment::where('provider_id', $providerId)->get();
 
@@ -116,5 +120,19 @@ class BookingController extends Controller
             ];
         }));
 
+    }
+    public function getAppointmentsforCustomers($userId)
+    {
+        $appointments = Appointment::where('user_id', $userId)->get();
+
+        return response()->json($appointments->map(function ($appointments) {
+            return [
+                'id' => $appointments->id,
+                'user_id' => $appointments->user_id,
+                'status' => $appointments->status,
+                'start_time' => Carbon::parse($appointments->start_time)->toIso8601String(),
+                'end_time' => Carbon::parse($appointments->end_time)->toIso8601String(),
+            ];
+        }));
     }
 }

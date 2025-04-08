@@ -7,6 +7,14 @@
 
     <div class="container py-12">
         <div class="row">
+            <div class="d-flex mt-5 mb-5 ">
+                <div class="ms-auto">
+                    <form action="{{ route('index') }}" method="GET">
+                        @csrf
+                        <label for="search">Search: </label>
+                        <input type="text" name="search" id="search"></div>
+                    </form>
+            </div>
             @foreach ($providers as $provider)
                 <div class="col-md-4 col-sm-6 col-12 mb-4 mt-5">
                     <div class="card text-center border border-primary shadow-lg text-white bg-dark">
@@ -26,5 +34,9 @@
                 </div>
             @endforeach
         </div>
+    <div class="mt-5">
+        {{ $providers->links() }}
     </div>
+    </div>
+
 </x-app-layout>
