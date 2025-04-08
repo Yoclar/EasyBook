@@ -1,9 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Providers') }}
-        </h2>
     </x-slot>
+
+    <div class="d-flex justify-content-center mt-5">
+        <div class="card text-center shadow-lg p-4" style="width: 80rem;">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title h2">
+                        We are delighted to inform you that your booking has been successfully submitted.
+                        <br>
+                        The provider will review and confirm your appointment shortly.
+                        <br>
+                        You will be notified once the confirmation is complete.
+                    </h5>
+                </div>
+            </div>                  
+        </div>
+    </div>
+    {{--!  --}}
+    {{-- additional redirects/info later maybe --}}
 
    
 </x-app-layout>

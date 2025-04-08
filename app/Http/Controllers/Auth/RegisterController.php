@@ -84,7 +84,7 @@ class RegisterController extends Controller
         Auth::login($user);
 
         session()->forget('registration_role');
-        \Jeybin\Toastr\Toastr::error('Registration successful')->toast();
+        \Jeybin\Toastr\Toastr::success('Registration successful')->toast();
 
         return redirect(route('dashboard'));
     }

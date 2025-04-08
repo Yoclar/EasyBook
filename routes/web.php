@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderListingController;
+use App\Http\Controllers\BookingManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,7 +27,17 @@ Route::middleware('auth')->group(function () {
     /*     Route::post('/provider/{id}/booking', [BookingController::class, 'store'])->name('booking.store'); */
     Route::get('/get-business-hours/{providerId}', [BookingController::class, 'getBusinessHours']);
     Route::post('/create-booking/{id}', [BookingController::class, 'store'])->name('store');
-    Route::get('/get-bookings/{providerId}', [BookingController::class, 'getAppointments']);
+    Route::prefix('get-bookings')->group(function () {
+        Route::get('/provider/{providerId}', [BookingController::class, 'getAppointmentsforProviders']);
+        Route::get('/customer/{userId}', [BookingController::class, 'getAppointmentsforCustomers']);
+    });
+    Route::get('/mybookings', [BookingManagementController::class, 'index'])->name('myBookingsIndex');
+    Route::patch('/approveApplication/{id}', [BookingManagementController::class, 'approveApplication'])->name('approveApplication');
+    Route::patch('/declineApplication/{id}', [BookingManagementController::class, 'declineApplication'])->name('declineApplication');
+    //redirect a post-redirect-get pattern szerint a foglalás után
+    Route::get('/appointment-booked-info', function () {
+        return view('includes.appointmentBookedInfo');
+    })->name('booking.appointmentBookedInfo');
 
 });
 

@@ -8,19 +8,16 @@ use Illuminate\Http\Request;
 
 class ProviderListingController extends Controller
 {
-    /*     use WithPagination; */
     public function index(Request $request)
     {
+        $query = ProviderProfile::with('user');
+        if($request->has('search')) {
+            $searchInput = $request->input('search');
+            $query->where('service_name', 'LIKE', "%{$searchInput}%");
+        }
+        $providers = $query->paginate(24);
 
-        $providers = ProviderProfile::with('user')->get();
-
-        return view('includes.ProviderListing', [
-            'providers' => $providers,
-        ]);
-
-        /* return view('profile.edit', [
-            'user' => $request->user(),
-            'providerProfile' => $providerProfile,
-        ]); */
+        return view('includes.ProviderListing', compact('providers'));
     }
+
 }
