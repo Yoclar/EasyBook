@@ -44,7 +44,7 @@ class RegisterController extends Controller
         $role = session('registration_role', 'customer');
 
         if ($role === 'provider') {
-            $rules['service_name'] = ['required', 'string', 'max:255'];
+            $rules['company_name'] = ['required', 'string', 'max:255'];
             $rules['description'] = ['nullable', 'string'];
             $rules['average_price'] = ['nullable', 'integer', 'min:0'];
             $rules['address'] = ['nullable', new AddressFormatRule];
@@ -63,7 +63,7 @@ class RegisterController extends Controller
         if ($role === 'provider') {
             $providerProfile = ProviderProfile::create([
                 'user_id' => $user->id,
-                'service_name' => $validated['service_name'],
+                'company_name' => $validated['company_name'],
                 'description' => $validated['description'] ?? '',
                 'address' => $validated['address'] ?? null,
                 'website' => $validated['website'] ?? null,

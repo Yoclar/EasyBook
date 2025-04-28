@@ -21,7 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/provider/profile', [ProfileController::class, 'updateProviderProfile'])
         ->name('provider.profile.update');
-    Route::post('/setWorkingHours', [ProfileController::class, 'setWorkingHours'])->name('setWorkingHours');
+    Route::post('/profile/setWorkingHours', [ProfileController::class, 'setWorkingHours'])->name('setWorkingHours');
+    Route::post('/profile/enableCalendar', [ProfileController::class, 'enableGoogleCalendar'])->name('enableGoogleCalendar');
     Route::get('/providers', [ProviderListingController::class, 'index'])->name('index');
     Route::get('/provider/{id}/booking', [BookingController::class, 'index'])->name('booking.index');
     /*     Route::post('/provider/{id}/booking', [BookingController::class, 'store'])->name('booking.store'); */
@@ -38,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/appointment-booked-info', function () {
         return view('includes.appointmentBookedInfo');
     })->name('booking.appointmentBookedInfo');
+
+    Route::post('/calendar/create', [GoogleCalendarController::class, 'storeEvent']);
 
 });
 

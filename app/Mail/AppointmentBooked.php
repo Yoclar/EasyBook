@@ -15,7 +15,7 @@ class AppointmentBooked extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public string $name, public string $service_name, public string $start_time, public string $end_time) {}
+    public function __construct(public string $name, public string $company_name, public string $start_time, public string $end_time) {}
 
     /**
      * Get the message envelope.
@@ -36,7 +36,7 @@ class AppointmentBooked extends Mailable
             markdown: 'emails.appointments.booked',
             with: [
                 'name' => $this->name,
-                'service_name' => $this->service_name,
+                'company_name' => $this->company_name,
                 'start_time' => $this->start_time,
                 'end_time' => $this->end_time,
             ],

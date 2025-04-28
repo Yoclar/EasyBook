@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\ProviderProfile;
 use App\Models\User;
@@ -25,7 +26,10 @@ class LoginController extends Controller
         $role = $request->query('role');
         session(['role' => $role]);
 
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+        ->scopes(['openid', 'profile', 'email','https://www.googleapis.com/auth/calendar'])
+        ->with(['access_type' => 'offline', 'prompt' => 'consent'])
+        ->redirect();
     }
 
     /**
@@ -36,12 +40,10 @@ class LoginController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->stateless()->user();
+            $user = Socialite::driver('google')->user(); 
             $role = session('role', 'customer');
             $existingUser = User::where('email', $user->getEmail())->first();
-            // TODO
-            // ! if the user changes their password, in the profiles he/she can't sign in with that google account anymore
-            // ! need a solution
+     
 
             if ($existingUser) {
                 Auth::login($existingUser);
@@ -50,15 +52,20 @@ class LoginController extends Controller
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
                     'is_google_user' => true,
+                    'google_access_token' => $user->token,
+                    'google_refresh_token' =>  $user->refreshToken,
+                    'google_token_expires_at' => now('Europe/Budapest')->addSeconds($user->expiresIn),
+                    'using_google_calendar' => false,
                     'password' => bcrypt(Str::random(32)),
                     'role' => $role ?? 'customer',
                 ]);
+           /*      dd($newUser->toArray()); */
                 if ($role == 'provider') {
 
                     $providerProfile = ProviderProfile::create([
                         'user_id' => $newUser->id,
                         'profile_image' => $user->getAvatar(),
-                        'service_name' => $this->generateProviderName('Service_name'),
+                        'company_name' => $this->generateProviderName('Company'),
                     ]);
                     foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                         WorkingHour::create([
@@ -83,7 +90,13 @@ class LoginController extends Controller
             }
 
         } catch (\Exception $e) {
-            dd('Error creating provider profile:', $e->getMessage());
+            dd([
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
 
             return redirect('login')->with('error', 'Google login failed or no email returned.');
         }
@@ -94,7 +107,7 @@ class LoginController extends Controller
         do {
             $uuid = UUid::uuid4()->toString();
             $generatedServiceName = $basestring.'_'.substr($uuid, 0, 8);
-            $userExists = ProviderProfile::where('service_name', $generatedServiceName)->exists();
+            $userExists = ProviderProfile::where('company_name', $generatedServiceName)->exists();
         } while ($userExists);
 
         return $generatedServiceName;

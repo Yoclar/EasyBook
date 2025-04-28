@@ -25,7 +25,7 @@ class ProviderProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service_name' => [
+            'company_name' => [
                 'sometimes',
                 'string',
                 'max:50',

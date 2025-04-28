@@ -12,7 +12,7 @@ class ProviderListingController extends Controller
         $query = ProviderProfile::with('user');
         if ($request->has('search')) {
             $searchInput = $request->input('search');
-            $query->where('service_name', 'LIKE', "%{$searchInput}%");
+            $query->where('company_name', 'LIKE', "%{$searchInput}%");
         }
         $providers = $query->paginate(24);
 

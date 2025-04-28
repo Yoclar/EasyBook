@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('provider_id')->constrained('provider_profiles')->cascadeOnDelete();
             $table->dateTime('start_time');
             $table->dateTime('end_time');
+            $table->string('service_name');
             $table->enum('status', ['pending', 'confirmed', 'canceled']);
             $table->timestamps();
         });

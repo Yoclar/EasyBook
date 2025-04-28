@@ -9,7 +9,7 @@ class ProviderProfile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'profile_image', 'service_name', 'description', 'website', 'address'];
+    protected $fillable = ['user_id', 'profile_image', 'company_name', 'description', 'website', 'address'];
 
     // Egy providernek pontosan egy ProviderProfile-ja van
     public function user()
