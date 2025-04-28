@@ -38,9 +38,9 @@
         @if (!empty($role) && $role === 'provider')
             
             <div class="mt-4">
-                <x-input-label for="service_name" :value="__('Service Name')" />
-                <x-text-input id="service_name" class="block mt-1 w-full" type="text" name="service_name" :value="old('service_name')"/>
-                <x-input-error :messages="$errors->get('service_name')" class="mt-2" />
+                <x-input-label for="company_name" :value="__('Service Name')" />
+                <x-text-input id="company_name" class="block mt-1 w-full" type="text" name="company_name" :value="old('company_name')"/>
+                <x-input-error :messages="$errors->get('company_name')" class="mt-2" />
             </div>
             <div class="mt-4">
                 <x-input-label for="descriptione" :value="__('Description')" />

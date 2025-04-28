@@ -4,8 +4,8 @@
 Dear **{{ $name }}**,
 
 
-Your application to the **{{ $service_name }}** on **{{ $start_time }}** -- **{{ $end_time }}** has been successfully sent.
-Please note that **{{ $service_name }}** must accept your application for it to be valid.
+Your application to the **{{ $company_name }}** on **{{ $start_time }}** -- **{{ $end_time }}** has been successfully sent.
+Please note that **{{ $company_name }}** must accept your application for it to be valid.
 
 We will notify you once a decision has been made.
 

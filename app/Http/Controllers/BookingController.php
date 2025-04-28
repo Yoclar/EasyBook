@@ -54,7 +54,7 @@ class BookingController extends Controller
     {
 
         $validated = $request->validate([
-            'name' => ['required', 'exists:users,name'], // useless here :)
+            'service_name' => ['required', 'string', 'max:25'], 
             'start_time' => ['required', 'date', new DateValidationForBookingRule],
             'end_time' => ['required', 'date', new DateValidationForBookingRule],
         ]);
@@ -66,7 +66,8 @@ class BookingController extends Controller
 
             return redirect()->back();
         }
-
+        
+        //Csekkoljuk, hogy ne lehessen arra az időpontra (vagy intervallra foglalni) ami már foglalt
         $isBooked = Appointment::where('provider_id', $id) // Csak az adott provider foglalásait nézi
             ->where(function ($query) use ($start_time, $end_time) {
                 $query->whereBetween('start_time', [$start_time, $end_time])
@@ -92,16 +93,22 @@ class BookingController extends Controller
             return redirect()->back();
         }
 
+        //!
+        //Csekkoljuk, hogy az adott usernek van-e már foglalása akármelyik providerhez abban az intervallban
+        //még meg kell írni
+        //!
+
         Appointment::create([
             'user_id' => auth()->user()->id,
             'provider_id' => $id,
             'start_time' => $start_time,
             'end_time' => $end_time,
+            'service_name' => $validated['service_name'],
             'status' => 'pending',
         ]);
         \Jeybin\Toastr\Toastr::success('Appointment created successfully')->toast();
-
-        Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('service_name'), $start_time, $end_time));
+        //!a tesztelés idejére kikommenteztem
+        //Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
 
         return redirect()->route('booking.appointmentBookedInfo');
 

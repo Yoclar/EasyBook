@@ -24,6 +24,10 @@ class User extends Authenticatable
         'password',
         'role',
         'is_google_user',
+        'google_access_token',
+        'google_refresh_token',
+        'google_token_expires_at'
+
     ];
 
     // Ha provider, akkor lehet egy ProviderProfile-ja.

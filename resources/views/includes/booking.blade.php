@@ -45,7 +45,7 @@
                  style="width: 150px; height: 150px; object-fit: cover;"> --}}
     
             <div class="card-body">
-                <h1 class="display-6 card-title">{{ $provider->service_name }}</h1>
+                <h1 class="display-6 card-title">{{ $provider->company_name }}</h1>
                 <p class="card-text">{{ $provider->description }}</p>
                 
                 <!-- Location (kikapcsolható) -->
@@ -85,9 +85,9 @@
                 <div class="modal-body">
                     <form id="bookingForm" method="POST" action="{{ route('store', $provider->id) }} ">
                         @csrf
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                        <div class="form-group mb-3">
+                            <label for="service_name">Service name</label>
+                            <input type="text" name="service_name" id="service_name" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="start_time" class="form-label">Start time</label>

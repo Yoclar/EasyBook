@@ -29,8 +29,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Name</th>
-                                        {{--!  --}}
-                                        {{-- Service name here later --}}
+                                        <th scope="col">Service Name</th>
                                         <th scope="col">Start Time</th>
                                         <th scope="col">End Time</th>
                                         <th scope="col">Status</th>
@@ -42,6 +41,7 @@
                                         <tr>
                                             <td scope="row">{{ $booking->id }}</td>
                                             <td scope="row">{{ $booking->user->name }}</td>
+                                            <td scope="row">{{ $booking->service_name }}
                                             <td scope="row">{{ $booking->start_time }}</td>
                                             <td scope="row">{{ $booking->end_time }}</td>
                                             <td scope="row" style="display: flex; align-items: center;">

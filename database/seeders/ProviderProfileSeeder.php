@@ -16,14 +16,14 @@ class ProviderProfileSeeder extends Seeder
         $providers = [
             [
                 'user_id' => User::where('email', 'john@example.com')->first()->id, // kapcsolat a user_id-hez
-                'service_name' => 'Web Development',
+                'company_name' => 'Web Development',
                 'description' => 'Full-stack web development services.',
                 'address' => '1061, Budapest, Andrássy út 39',
                 'website' => 'www.fullstack.hu',
             ],
             [
                 'user_id' => User::where('email', 'jane@example.com')->first()->id,
-                'service_name' => 'Graphic Design',
+                'company_name' => 'Graphic Design',
                 'description' => 'Creative graphic design for branding and marketing.',
                 'address' => '4025, Debrecen, Piac utca 20',
                 'website' => 'www.graphicdesign.com',

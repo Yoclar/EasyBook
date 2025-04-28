@@ -14,10 +14,10 @@
     @csrf
     @method('patch')
     <div class="mb-4">
-        <x-input-label for="service_name" :value="__('Service Name')" />
-        <x-text-input id="service_name" name="service_name" type="text" class="mt-1 block w-full" 
-            :value="old('service_name', $providerProfile->service_name ?? '')" required />
-        <x-input-error class="mt-2" :messages="$errors->get('service_name')" />
+        <x-input-label for="company_name" :value="__('Company name')" />
+        <x-text-input id="company_name" name="company_name" type="text" class="mt-1 block w-full" 
+            :value="old('company_name', $providerProfile->company_name ?? '')" required />
+        <x-input-error class="mt-2" :messages="$errors->get('company_name')" />
     </div>
 
     <div class="mb-4">

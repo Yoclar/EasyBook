@@ -21,7 +21,7 @@ class ProviderProfileFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create(['role' => 'provider'])->id,
-            'service_name' => fake()->jobTitle(),
+            'company_name' => fake()->jobTitle(),
             'description' => fake()->sentence(),
             'address' => fake()->address(),
             'website' => fake()->domainName(),

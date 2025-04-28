@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
 {
-    protected $fillable = ['user_id', 'provider_id', 'start_time', 'end_time', 'status'];
+    protected $fillable = ['user_id', 'provider_id', 'start_time', 'end_time', 'status', 'service_name'];
 
     // Egy foglalás tartozik egy user-hez.
     public function user()
@@ -17,6 +17,6 @@ class Appointment extends Model
     // Egy foglalás tartozik egy provider-hez.
     public function provider()
     {
-        return $this->belongsTo(User::class, 'provider_id');
+        return $this->belongsTo(ProviderProfile::class, 'provider_id');
     }
 }

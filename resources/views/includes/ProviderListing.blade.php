@@ -19,7 +19,7 @@
                 <div class="col-md-4 col-sm-6 col-12 mb-4 mt-5">
                     <div class="card text-center border border-primary shadow-lg text-white bg-dark">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $provider->service_name }}</h5>
+                            <h5 class="card-title">{{ $provider->company_name }}</h5>
                             <i>
                             <p class="card-text">{{ $provider->user->email }}</p>
                             @if($provider->user?->phone)
