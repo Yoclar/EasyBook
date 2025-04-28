@@ -26,7 +26,7 @@ class User extends Authenticatable
         'is_google_user',
         'google_access_token',
         'google_refresh_token',
-        'google_token_expires_at'
+        'google_token_expires_at',
 
     ];
 

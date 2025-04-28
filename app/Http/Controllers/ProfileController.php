@@ -42,7 +42,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        //!EZ ITT VALAMIÉRT NEM MEGY
+        // !EZ ITT VALAMIÉRT NEM MEGY
         $user = $request->user();
         $user->fill($request->validated());
 
@@ -127,22 +127,24 @@ class ProfileController extends Controller
     public function enableGoogleCalendar(Request $request)
     {
 
-        //! Ha nem volt bepipálva eddig de most igen, akkor bekapcsoljuk, ha bevolt, de most nem akkor kikapcsoljuk
+        // ! Ha nem volt bepipálva eddig de most igen, akkor bekapcsoljuk, ha bevolt, de most nem akkor kikapcsoljuk
         $user = auth()->user();
         $google_calendar = $request->input('google_calendar');
         if ($google_calendar == true) {
             $user->using_google_calendar = true;
             $user->update();
             \Jeybin\Toastr\Toastr::success('Google Calendar preference saved successfully')->toast();
+
             return redirect()->back();
-        }
-        else {
+        } else {
             $user->using_google_calendar = false;
             $user->update();
             \Jeybin\Toastr\Toastr::success('Google Calendar preference saved successfully')->toast();
+
             return redirect()->back();
         }
     }
+
     /**
      * Delete the user's account.
      */

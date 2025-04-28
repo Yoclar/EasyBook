@@ -1,28 +1,30 @@
 <?php
+
 namespace App\Services;
+
+use Carbon\Carbon;
 use Google\Client;
 use Google\Service\Calendar;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
-class GoogleCalendarService {
+class GoogleCalendarService
+{
     protected $client;
+
     protected $calendarService;
 
-
-    public function __construct(){
-        $this->client = new Client();
+    public function __construct()
+    {
+        $this->client = new Client;
         $this->client->setClientId(config('services.google.client_id'));
         $this->client->setClientSecret(config('services.google.client_secret'));
         $this->client->setRedirectUri(config('services.google.redirect'));
         $this->client->addScope(Calendar::CALENDAR);
         $this->calendarService = new Calendar($this->client);
-  
+
     }
 
     public function getClient($accessToken = null, $refreshToken = null, $expiresAt = null, $user = null)
     {
-  
 
         if ($accessToken) {
             $this->client->setAccessToken([
@@ -31,10 +33,9 @@ class GoogleCalendarService {
                 'refresh_token' => $refreshToken,
             ]);
 
-   
         } else {
             $user = $user ?: auth()->user();
-            if (!$user->google_access_token) {
+            if (! $user->google_access_token) {
                 abort(403, 'Google token missing.');
             }
             $this->client->setAccessToken([
@@ -45,12 +46,11 @@ class GoogleCalendarService {
             $refreshToken = $user->google_refresh_token; // ha onnan jön
 
         }
-  
-        
+
         // Token frissítés
         if ($this->client->isAccessTokenExpired() && $refreshToken) {
             $newToken = $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
-        
+
             if (isset($newToken['access_token']) && $user) {
                 $user->update([
                     'google_access_token' => $newToken['access_token'],
@@ -63,13 +63,11 @@ class GoogleCalendarService {
         return $this->calendarService;
     }
 
-   
-
-
     public function createEvent($eventData, $calendarId = 'primary')
     {
-    
+
         $event = new \Google\Service\Calendar\Event($eventData);
+
         return $this->calendarService->events->insert($calendarId, $event);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\ProviderProfile;
 use App\Models\User;
@@ -27,9 +26,9 @@ class LoginController extends Controller
         session(['role' => $role]);
 
         return Socialite::driver('google')
-        ->scopes(['openid', 'profile', 'email','https://www.googleapis.com/auth/calendar'])
-        ->with(['access_type' => 'offline', 'prompt' => 'consent'])
-        ->redirect();
+            ->scopes(['openid', 'profile', 'email', 'https://www.googleapis.com/auth/calendar'])
+            ->with(['access_type' => 'offline', 'prompt' => 'consent'])
+            ->redirect();
     }
 
     /**
@@ -40,10 +39,9 @@ class LoginController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->user(); 
+            $user = Socialite::driver('google')->user();
             $role = session('role', 'customer');
             $existingUser = User::where('email', $user->getEmail())->first();
-     
 
             if ($existingUser) {
                 Auth::login($existingUser);
@@ -53,13 +51,13 @@ class LoginController extends Controller
                     'email' => $user->getEmail(),
                     'is_google_user' => true,
                     'google_access_token' => $user->token,
-                    'google_refresh_token' =>  $user->refreshToken,
+                    'google_refresh_token' => $user->refreshToken,
                     'google_token_expires_at' => now('Europe/Budapest')->addSeconds($user->expiresIn),
                     'using_google_calendar' => false,
                     'password' => bcrypt(Str::random(32)),
                     'role' => $role ?? 'customer',
                 ]);
-           /*      dd($newUser->toArray()); */
+                /*      dd($newUser->toArray()); */
                 if ($role == 'provider') {
 
                     $providerProfile = ProviderProfile::create([
@@ -96,7 +94,6 @@ class LoginController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
             ]);
-            
 
             return redirect('login')->with('error', 'Google login failed or no email returned.');
         }
