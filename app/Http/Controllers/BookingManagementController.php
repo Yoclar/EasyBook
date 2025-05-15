@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Services\GoogleCalendarService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class BookingManagementController extends Controller
 {
@@ -31,9 +31,9 @@ class BookingManagementController extends Controller
     }
 
     public function approveApplication($id)
-    {   
+    {
         try {
-                $appointment = Appointment::find($id);
+            $appointment = Appointment::find($id);
             if (! $appointment) {
                 abort(404, 'Appointment not found.');
             }
@@ -73,7 +73,7 @@ class BookingManagementController extends Controller
                     'appointed_customer_id' => $appointment->user->id,
                     'appointed_provider_id' => $appointment->provider->user->id,
                     'start_time' => $appointment->start_time,
-                    'end_time' => $appointment->end_time
+                    'end_time' => $appointment->end_time,
                 ]);
 
             }
@@ -109,15 +109,14 @@ class BookingManagementController extends Controller
                     'appointed_customer_id' => $appointment->user->id,
                     'appointed_provider_id' => $appointment->provider->user->id,
                     'start_time' => $appointment->start_time,
-                    'end_time' => $appointment->end_time
+                    'end_time' => $appointment->end_time,
                 ]);
 
-
             }
-            //!tesztelés alatt
-            //Mail::to($appointment->user->email)->send(new AppointmentAccepted($appointment->provider->company_name, $appointment->start_time, $appointment->end_time));
+            // !tesztelés alatt
+            // Mail::to($appointment->user->email)->send(new AppointmentAccepted($appointment->provider->company_name, $appointment->start_time, $appointment->end_time));
             \Jeybin\Toastr\Toastr::success('Appointment confirmed.')->toast();
-             Log::info('Appointment confirmed successfully', [
+            Log::info('Appointment confirmed successfully', [
                 'user_id' => auth()->id(),
                 'appointment_id' => $appointment->id,
                 'customer_id' => $appointment->user->id,
@@ -125,16 +124,16 @@ class BookingManagementController extends Controller
                 'status' => $appointment->status,
                 'start_time' => $appointment->start_time,
             ]);
+
             return redirect()->back();
         } catch (\Exception $e) {
             Log::error('Error confirming appointment', [
                 'error_message' => $e->getMessage(),
                 'user_id' => auth()->id(),
             ]);
+
             return redirect()->back()->withErrors(['message' => 'There was a problem confirming the appointment.']);
         }
-
-        
 
     }
 

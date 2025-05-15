@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Ramsey\Uuid\Uuid;
-use App\Models\Appointment;
-
 
 class LoginController extends Controller
 {
@@ -39,19 +37,18 @@ class LoginController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handleGoogleCallback()
-    {   
-        
+    {
+
         try {
-            $user = Socialite::driver('google')->user(); 
+            $user = Socialite::driver('google')->user();
             $role = session('role', 'customer');
             Log::info('Google callback received', ['email' => $user->getEmail(), 'role' => $role]);
             $existingUser = User::where('email', $user->getEmail())->first();
 
-
-
             if ($existingUser) {
-                 Auth::login($existingUser);
-                 Log::info('Existing user logged in via Google', ['user_id' => $existingUser->id]);
+                Auth::login($existingUser);
+                Log::info('Existing user logged in via Google', ['user_id' => $existingUser->id]);
+
                 return redirect()->route('dashboard');
             } else {
                 $newUser = User::create([
@@ -75,7 +72,7 @@ class LoginController extends Controller
                     ]);
                     Log::info('Provider profile created', ['provider_id' => $providerProfile->id]);
                     foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
-                       $workingHour = WorkingHour::create([
+                        $workingHour = WorkingHour::create([
                             'provider_id' => $providerProfile->id,
                             'day' => $day,
                             'is_working_day' => ($day !== 'Saturday' && $day !== 'Sunday') ? 1 : 0,
@@ -92,15 +89,16 @@ class LoginController extends Controller
             if ($role == 'provider') {
                 \Jeybin\Toastr\Toastr::info('Please edit your profile details')->timeOut(5000)->toast();
 
-            } 
+            }
+
             return redirect()->route('dashboard');
 
         } catch (\Exception $e) {
-               Log::error('Google login failed', [
+            Log::error('Google login failed', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-               ]);
+            ]);
 
             return redirect('login')->with('error', 'Google login failed or no email returned.');
         }

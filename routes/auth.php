@@ -20,7 +20,7 @@ Route::middleware('guest')->group(function () {
     Route::get('callback', [LoginController::class, 'handleGoogleCallback']);
     // web.php
 
-/*    Route::post('/checkEmailTaken', [RegisterController::class, 'checkEmailIsTaken'])->name('email.check');  */
+    /*    Route::post('/checkEmailTaken', [RegisterController::class, 'checkEmailIsTaken'])->name('email.check'); */
     Route::post('/calculate-entropy', [RegisterController::class, 'calculateEntropy'])->name('caculate-entropy');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])

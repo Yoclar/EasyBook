@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Appointment;
 
 class DashboardController extends Controller
@@ -24,7 +22,7 @@ class DashboardController extends Controller
                 ->first();
         }
 
-        if ($user->role === 'provider'){
+        if ($user->role === 'provider') {
             $unconfirmedBooking = Appointment::where('provider_id', $user->providerProfile->id)
                 ->where('start_time', '>', $now)
                 ->where('status', '=', 'pending')
@@ -33,5 +31,4 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('nextAppointment', 'unconfirmedBooking'));
     }
-
 }
