@@ -28,11 +28,6 @@ class AppointmentAccepted extends Mailable
     {
         return new Envelope(
             subject: 'Appointment Approved',
-            with: [
-                'company_name' => $this->company_name,
-                'start_time' => $this->start_time,
-                'end_time' => $this->end_time,
-            ]
         );
     }
 
@@ -43,7 +38,11 @@ class AppointmentAccepted extends Mailable
     {
         return new Content(
             markdown: 'emails.appointments.bookingConfirmed',
-
+             with: [
+                'company_name' => $this->company_name,
+                'start_time' => $this->start_time,
+                'end_time' => $this->end_time,
+            ]
         );
     }
 

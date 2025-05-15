@@ -75,7 +75,7 @@ class LoginController extends Controller
                     ]);
                     Log::info('Provider profile created', ['provider_id' => $providerProfile->id]);
                     foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
-                        WorkingHour::create([
+                       $workingHour = WorkingHour::create([
                             'provider_id' => $providerProfile->id,
                             'day' => $day,
                             'is_working_day' => ($day !== 'Saturday' && $day !== 'Sunday') ? 1 : 0,
