@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -59,6 +60,7 @@ class RegisterController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => $role,
         ]);
+        Log::info('New user created', ['name' => $user->name]);
 
         if ($role === 'provider') {
             $providerProfile = ProviderProfile::create([
@@ -71,12 +73,13 @@ class RegisterController extends Controller
             ]);
             foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                 WorkingHour::create([
-                    'provider_id' => $user->id,
+                    'provider_id' => $providerProfile->id,
                     'day' => $day,
                     'is_working_day' => ($day !== 'Saturday' && $day !== 'Sunday') ? 1 : 0,
                     'open_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '08:00' : null,
                     'close_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '16:00' : null,
                 ]);
+                Log::info('Working hour created for', [$providerProfile->company_name]);
             }
 
         }
@@ -119,7 +122,7 @@ class RegisterController extends Controller
         return $entropy;
     }
 
-    /*  public function checkEmailIsTaken(Request $request)
+     /*  public function checkEmailIsTaken(Request $request)
      {
          $email = $request->input('email');
 

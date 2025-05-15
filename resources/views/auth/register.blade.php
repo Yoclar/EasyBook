@@ -1,14 +1,4 @@
 <x-guest-layout>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- Phone masking --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@21.1.1/build/css/intlTelInput.min.css">
-    {{-- Password strength checker JQuery --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <form method="POST" action="{{ route('register') }}">
         @csrf
         @if (!empty($role) && $role === 'provider')
@@ -104,12 +94,12 @@
     </form>
     <div class="my-6 flex items-center justify-center">
         <div class="flex-1 border-t border-gray-300"></div>
-        <span class="px-3 bg-white text-gray-500 text-sm font-semibold mx-2">OR</span>
+        <span class="px-3  text-gray-500 text-sm font-semibold mx-2">OR</span>
         <div class="flex-1 border-t border-gray-300"></div>
     </div>
 
     <a href="{{ route('login.google') }}?role={{ $role }}" 
-    class="mt-4 flex items-center justify-center w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg shadow-sm hover:shadow-md transition">
+    class="mt-4 flex items-center justify-center w-full  border border-gray-300 text-gray-700 py-2 rounded-lg shadow-sm hover:shadow-md transition">
      <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5 mr-2" style="margin-right:12px" alt="Google logo">
      Continue with Google
     </a>

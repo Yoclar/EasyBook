@@ -4,16 +4,6 @@
             Provider details
         </h2>
     </x-slot>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- jQuery (fontos a FullCalendar működéséhez) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <style>
         #calendar {
             max-width: 900px;
@@ -87,17 +77,17 @@
                         @csrf
                         <div class="form-group mb-3">
                             <label for="service_name">Service name</label>
-                            <input type="text" name="service_name" id="service_name" class="form-control">
+                            <input type="text" name="service_name" id="service_name" required class="form-control" oninput="blockBookButton();">
                         </div>
                         <div class="mb-3">
                             <label for="start_time" class="form-label">Start time</label>
-                            <input type="datetime-local" name="start_time" class="form-control" id="start_time" value="{{ old('start_time') }}" required>
+                            <input type="datetime-local" name="start_time" class="form-control" id="start_time" value="{{ old('start_time') }}" required oninput="blockBookButton();">
                         </div>
                         <div class="mb-3">
                             <label for="end_time" class="form-label">End time</label>
-                            <input type="datetime-local" name="end_time" class="form-control" id="end_time" value="{{ old('end_time') }}" required>
+                            <input type="datetime-local" name="end_time" class="form-control" id="end_time" value="{{ old('end_time') }}" required oninput="blockBookButton();"> 
                         </div>
-                        <button type="submit" class="btn btn-primary">Book</button>
+                        <button type="submit" class="btn btn-primary" id="bookingBtn">Book</button>
                     </form>
                 </div>
             </div>
@@ -222,6 +212,8 @@
                             // Azonnali értékbeállítás
                             startTimeInput.value = formatDateToLocal(info.start);
                             endTimeInput.value = formatDateToLocal(info.end);
+
+                            blockBookButton();
     
                             var myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
                             myModal.show();
@@ -244,6 +236,31 @@
             let offset = date.getTimezoneOffset(); // Az időzóna eltérése percekben
             let localDate = new Date(date.getTime() - offset * 60000); // Időeltolás korrigálása
             return localDate.toISOString().slice(0, 16) ; // Helyes formátum
+        }
+        function blockBookButton(){
+            let serviceNameInput = document.getElementById('service_name');
+            let bookingBtn = document.getElementById('bookingBtn');
+            let startTimeInput = document.getElementById('start_time');
+            let endTimeInput = document.getElementById('end_time');
+
+            let serviceName = serviceNameInput.value.trim();
+            let startTime = startTimeInput.value;
+            let endTime = endTimeInput.value;
+            
+
+            let isServiceNameValid = serviceName !== '';
+            let isStartTimeValid = startTime !== '';
+            let isEndTimeValid = endTime !== '';
+            let isTimeOrderValid = startTime < endTime;
+
+            if(isServiceNameValid && isStartTimeValid && isEndTimeValid && isTimeOrderValid)
+            {
+                bookingBtn.disabled = false;
+            }
+            else
+            {
+                bookingBtn.disabled = true;
+            }
         }
     </script>
     
