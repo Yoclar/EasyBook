@@ -1,26 +1,15 @@
 <x-app-layout>
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Bootstrap JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-        <!-- jQuery (fontos a FullCalendar működéséhez) -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-
     <x-slot name="header">
     </x-slot>
     @if($role === 'provider')
         <div class="container mt-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">Pending Appoinments</h5>
                 </div>
                 <div class="card-body">
                     @if($bookings->isEmpty())
-                        <p class="text-muted tex-center">No pending appointments.</p>
+                        <p class="text-muted">No pending appointments.</p>
                     @else
                     
                         <div class="table-responsive">
@@ -78,7 +67,7 @@
             </div>
         </div>
         <div class="container mt-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mb-5">
                 <div id="calendar"></div>
             </div>
         </div>
@@ -234,11 +223,10 @@
         </div>
     </div>
     <div class="container mt-4">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm mb-5">
             <div id="calendar"></div>
         </div>
     </div>
-
 
     <script>
         let calendar;

@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -151,7 +151,7 @@ return [
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,
-            'confirmPassword' => true,
+            'confirmPassword' => fn($user) => !$user->is_google_user,
             // 'window' => 0,
         ]),
     ],

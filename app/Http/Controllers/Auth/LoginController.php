@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Ramsey\Uuid\Uuid;
+use App\Models\Appointment;
+
 
 class LoginController extends Controller
 {
@@ -37,14 +39,20 @@ class LoginController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handleGoogleCallback()
-    {
+    {   
+        
         try {
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver('google')->user(); 
             $role = session('role', 'customer');
+            Log::info('Google callback received', ['email' => $user->getEmail(), 'role' => $role]);
             $existingUser = User::where('email', $user->getEmail())->first();
 
+
+
             if ($existingUser) {
-                Auth::login($existingUser);
+                 Auth::login($existingUser);
+                 Log::info('Existing user logged in via Google', ['user_id' => $existingUser->id]);
+                return redirect()->route('dashboard');
             } else {
                 $newUser = User::create([
                     'name' => $user->getName(),
@@ -57,7 +65,7 @@ class LoginController extends Controller
                     'password' => bcrypt(Str::random(32)),
                     'role' => $role ?? 'customer',
                 ]);
-                /*      dd($newUser->toArray()); */
+                Log::info('New user created via Google login', ['user_id' => $newUser->id]);
                 if ($role == 'provider') {
 
                     $providerProfile = ProviderProfile::create([
@@ -65,6 +73,7 @@ class LoginController extends Controller
                         'profile_image' => $user->getAvatar(),
                         'company_name' => $this->generateProviderName('Company'),
                     ]);
+                    Log::info('Provider profile created', ['provider_id' => $providerProfile->id]);
                     foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                         WorkingHour::create([
                             'provider_id' => $providerProfile->id,
@@ -73,6 +82,7 @@ class LoginController extends Controller
                             'open_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '08:00' : null,
                             'close_time' => ($day !== 'Saturday' && $day !== 'Sunday') ? '16:00' : null,
                         ]);
+                        Log::debug('Working hour created', ['day' => $day, 'working_hour_id' => $workingHour->id]);
                     }
 
                 }
@@ -82,18 +92,15 @@ class LoginController extends Controller
             if ($role == 'provider') {
                 \Jeybin\Toastr\Toastr::info('Please edit your profile details')->timeOut(5000)->toast();
 
-                return redirect()->to('/dashboard');
-            } else {
-                return redirect()->to('/dashboard');
-            }
+            } 
+            return redirect()->route('dashboard');
 
         } catch (\Exception $e) {
-            dd([
+               Log::error('Google login failed', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+               ]);
 
             return redirect('login')->with('error', 'Google login failed or no email returned.');
         }

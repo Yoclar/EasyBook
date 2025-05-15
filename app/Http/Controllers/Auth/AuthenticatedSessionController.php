@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,12 +26,47 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+       
+        $credentials = $request->only('email', 'password');
 
-        $request->session()->regenerate();
+        if (Auth::validate($credentials)) {
+            $user = \App\Models\User::where('email', $request->input('email'))->first();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+            if ($user && $user->two_factor_secret) {
+                // Ne léptessük be, csak elmentjük az azonosítót
+                session(['login.id' => $user->id]);
+
+                Log::info('User passed credentials but requires 2FA', [
+                    'user_id' => $user->id,
+                    'ip' => $request->ip(),
+                ]);
+
+                return redirect()->route('two-factor.login');
+            }
+
+            // Ha nincs 2FA, normál bejelentkezés
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            Log::info('User logged in', [
+                'user_id' => $user->id,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+            return redirect()->intended(route('dashboard'));
+        }
+
+        Log::warning('Failed login attempt', [
+            'email' => Str::limit($request->input('email'), 5, '...'),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+        // Hitelesítés sikertelen
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
+
 
     /**
      * Destroy an authenticated session.
@@ -42,6 +79,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+       return redirect()->intended(route('dashboard'));
     }
 }

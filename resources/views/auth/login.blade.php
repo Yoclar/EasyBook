@@ -1,11 +1,6 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -49,12 +44,12 @@
         </div>
         <div class="my-6 flex items-center justify-center">
             <div class="flex-1 border-t border-gray-300"></div>
-            <span class="px-3 bg-white text-gray-500 text-sm font-semibold mx-2">OR</span>
+            <span class="px-3 text-gray-500 text-sm font-semibold mx-2">OR</span>
             <div class="flex-1 border-t border-gray-300"></div>
         </div>
         
         <a href="{{ route('login.google') }}" 
-           class="mt-4 flex items-center justify-center w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg shadow-sm hover:shadow-md transition">
+           class="mt-4 flex items-center justify-center w-full border border-gray-300 text-white py-2 rounded-lg shadow-sm hover:shadow-md transition">
             <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5 mr-2" style="margin-right:12px" alt="Google logo">
             Continue with Google
         </a>

@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Log;
 
 class PasswordController extends Controller
 {
@@ -23,7 +24,10 @@ class PasswordController extends Controller
         $request->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
-
+        \Jeybin\Toastr\Toastr::success('Password updated successfully')->toast();
+        Log::info('Password updated', [
+            'user_id' => auth()->id(),
+        ]);
         return back()->with('status', 'password-updated');
     }
 }

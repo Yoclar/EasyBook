@@ -11,7 +11,7 @@
                 <div class="ms-auto">
                     <form action="{{ route('index') }}" method="GET">
                         @csrf
-                        <label for="search">Search: </label>
+                        <label class="text-white" for="search">Search: </label>
                         <input type="text" name="search" id="search"></div>
                     </form>
             </div>
