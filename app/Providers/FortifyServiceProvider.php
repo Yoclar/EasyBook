@@ -47,7 +47,8 @@ class FortifyServiceProvider extends ServiceProvider
         });
         Fortify::twoFactorChallengeView(function (Request $request) {
             $recovery = $request->get('recovery', false);
+
             return view('auth.two-factor-challenge', compact('recovery'));
-        }); 
+        });
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -38,7 +37,7 @@ class AppointmentAccepted extends Mailable
     {
         return new Content(
             markdown: 'emails.appointments.bookingConfirmed',
-             with: [
+            with: [
                 'company_name' => $this->company_name,
                 'start_time' => $this->start_time,
                 'end_time' => $this->end_time,

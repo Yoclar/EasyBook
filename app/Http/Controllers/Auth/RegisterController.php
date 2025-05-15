@@ -11,8 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules;
 
 class RegisterController extends Controller
 {
@@ -122,20 +122,20 @@ class RegisterController extends Controller
         return $entropy;
     }
 
-     /*  public function checkEmailIsTaken(Request $request)
-     {
-         $email = $request->input('email');
+    /*  public function checkEmailIsTaken(Request $request)
+    {
+        $email = $request->input('email');
 
-         $userFound = User::where('email', $email)->exists();
-         if ($userFound) {
-             return response()->json([
-                 'status' => 'failed',
-                 'message' => 'Email is already taken',
-             ]);
-         }
-         return response()->json([
-             'status' => 'success',
-         ]);
+        $userFound = User::where('email', $email)->exists();
+        if ($userFound) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Email is already taken',
+            ]);
+        }
+        return response()->json([
+            'status' => 'success',
+        ]);
 
-     } */
+    } */
 }

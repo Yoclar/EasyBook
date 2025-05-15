@@ -9,10 +9,10 @@ use App\Models\WorkingHour;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -55,6 +55,7 @@ class ProfileController extends Controller
         Log::info('User profile info updated', [
             'user_id' => auth()->id(),
         ]);
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -69,10 +70,11 @@ class ProfileController extends Controller
             $profile->save();
         }
         \Jeybin\Toastr\Toastr::success('Your providerprofile updated successfully')->toast();
-             Log::info('Providerprofile info updated', [
+        Log::info('Providerprofile info updated', [
             'user_id' => auth()->id(),
             'provider_id' => $profile->id,
         ]);
+
         return Redirect::route('profile.edit')->with('status', 'provider-profile-updated');
     }
 
@@ -93,8 +95,9 @@ class ProfileController extends Controller
             if ($validator->fails()) {
                 \Jeybin\Toastr\Toastr::error('Something was not in the correct format.')->toast();
                 Log::warning('User tried to set invalid working hours (formar error)', [
-                    'user_id' => auth()->id()
+                    'user_id' => auth()->id(),
                 ]);
+
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
@@ -109,13 +112,13 @@ class ProfileController extends Controller
                 if ($convertedCloseTimeToInt <= $convertedOpenTimeToInt) {
                     \Jeybin\Toastr\Toastr::error('Close time cannot be earlier than open time.')->toast();
                     Log::warning('User tried to set invalid working hours (Close time cannot be earlier than open time)', [
-                    'user_id' => auth()->id()
+                        'user_id' => auth()->id(),
                     ]);
+
                     return redirect()->back();
                 }
             }
 
-  
             WorkingHour::updateOrCreate(
                 ['provider_id' => auth()->user()->providerProfile->id, 'day' => $day],
                 [
@@ -130,6 +133,7 @@ class ProfileController extends Controller
         Log::info('Working hour saved or modified successfully', [
             'user_id' => auth()->id(),
         ]);
+
         return redirect()->back();
 
     }
@@ -147,12 +151,13 @@ class ProfileController extends Controller
                 'user_id' => auth()->id(),
                 'google_calendar' => true,
             ]);
+
             return redirect()->back();
         } else {
             $user->using_google_calendar = false;
             $user->update();
             \Jeybin\Toastr\Toastr::success('Google Calendar preference saved successfully')->toast();
-                   Log::info('Google Calendar option turned off successfully', [
+            Log::info('Google Calendar option turned off successfully', [
                 'user_id' => auth()->id(),
                 'google_calendar' => false,
             ]);
@@ -176,7 +181,7 @@ class ProfileController extends Controller
         Auth::logout();
         $user->delete();
         Log::info('User deleted successfully', [
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
         ]);
 
         $request->session()->invalidate();

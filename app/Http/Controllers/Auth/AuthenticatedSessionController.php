@@ -7,9 +7,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,7 +26,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-       
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::validate($credentials)) {
@@ -53,6 +53,7 @@ class AuthenticatedSessionController extends Controller
                 'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
+
             return redirect()->intended(route('dashboard'));
         }
 
@@ -61,12 +62,12 @@ class AuthenticatedSessionController extends Controller
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
+
         // Hitelesítés sikertelen
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-
 
     /**
      * Destroy an authenticated session.
@@ -79,6 +80,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-       return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('dashboard'));
     }
 }
