@@ -27,7 +27,7 @@
         <div class="card text-center shadow-lg p-4 bg-gray-800" style="width: 50rem;">
             <img src="{{ $imageUrl }}" 
             class="card-img-top rounded-circle mx-auto mt-3" 
-            style="width: 150px; height: 150px; object-fit: cover;">
+            style="width: 150px; height: 150px; object-fit: cover;" alt="Default profile picture">
 
                  {{--TODO user can change picture later --}}
                  {{--   $provider->profile_image 

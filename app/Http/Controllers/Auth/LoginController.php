@@ -22,7 +22,11 @@ class LoginController extends Controller
      */
     public function redirectToGoogle(Request $request)
     {
+        $allowedRoles = ['customer', 'provider'];
         $role = $request->query('role');
+        if(!in_array($role, $allowedRoles)){
+            abort(400, 'Invalid role');
+        }
         session(['role' => $role]);
 
         return Socialite::driver('google')

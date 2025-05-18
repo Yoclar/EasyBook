@@ -54,7 +54,7 @@ class BookingController extends Controller
     public function store(Request $request, $id)
     {
 
-        // try {
+        try {
         $validated = $request->validate([
             'service_name' => ['required', 'string', 'max:25'],
             'start_time' => ['required', 'date', new DateValidationForBookingRule],
@@ -162,7 +162,7 @@ class BookingController extends Controller
         // Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
 
         return redirect()->route('booking.appointmentBookedInfo');
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Error booking appointment', [
                 'error_message' => $e->getMessage(),
                 'user_id' => auth()->id(),
@@ -174,7 +174,7 @@ class BookingController extends Controller
             \Jeybin\Toastr\Toastr::error('An error occurred while booking your appointment. Please try again later.')->toast();
 
             return redirect()->back();
-        } */
+        } 
 
     }
 

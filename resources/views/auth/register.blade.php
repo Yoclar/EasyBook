@@ -109,7 +109,7 @@
   
     
     <!-- Telefon mező script -->
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@21.1.1/build/js/intlTelInput.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@21.1.1/build/js/intlTelInput.min.js" integrity="sha384-/oPKP9Vr3X1g+Pc37a9ENlRwEYqdqvSy1zPqZVE/DrEV569r71ZTIZojLaOjcqsx" crossorigin="anonymous"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const input = document.querySelector("#phone");

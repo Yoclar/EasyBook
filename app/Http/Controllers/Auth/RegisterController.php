@@ -26,8 +26,12 @@ class RegisterController extends Controller
 
             cookie()->queue(cookie()->forget('laravel_session'));
         }
-
+        $allowedRoles = ['customer', 'provider'];
         $role = $request->query('role', 'customer');
+        if(!in_array($role, $allowedRoles))
+        {
+            abort(400, 'invalid role');
+        }
         session(['registration_role' => $role]);
 
         return view('auth.register', compact('role'));
