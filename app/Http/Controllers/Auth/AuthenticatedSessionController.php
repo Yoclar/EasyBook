@@ -25,52 +25,49 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
-{
-    $credentials = $request->only('email', 'password');
+    {
+        $credentials = $request->only('email', 'password');
 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate(); 
+            $user = Auth::user();
 
-        $user = Auth::user(); 
+            if ($user && $user->two_factor_secret) {
 
+                Auth::logout();
+                session()->invalidate();
+                session()->regenerateToken();
 
-        if ($user && $user->two_factor_secret) {
-         
-            Auth::logout();
-            session()->invalidate();
-            session()->regenerateToken();
+                session(['login.id' => $user->id]);
 
-            session(['login.id' => $user->id]);
+                Log::info('User passed credentials but requires 2FA', [
+                    'user_id' => $user->id,
+                    'ip' => $request->ip(),
+                ]);
 
-            Log::info('User passed credentials but requires 2FA', [
+                return redirect()->route('two-factor.login');
+            }
+
+            Log::info('User logged in', [
                 'user_id' => $user->id,
                 'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
             ]);
 
-            return redirect()->route('two-factor.login');
+            return redirect()->intended(route('dashboard'));
         }
 
-        Log::info('User logged in', [
-            'user_id' => $user->id,
+        Log::warning('Failed login attempt', [
+            'email' => Str::limit($request->input('email'), 5, '...'),
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
 
-        return redirect()->intended(route('dashboard'));
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
-
-    Log::warning('Failed login attempt', [
-        'email' => Str::limit($request->input('email'), 5, '...'),
-        'ip' => $request->ip(),
-        'user_agent' => $request->userAgent(),
-    ]);
-
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
-}
-
 
     /**
      * Destroy an authenticated session.

@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
-        public function authorize()
+    public function authorize()
     {
         return true;
     }

@@ -19,7 +19,8 @@ class DateValidationForBookingRule implements ValidationRule
         try {
             $bookingTime = Carbon::parse($value);
         } catch (\Exception $e) {
-             $fail('The provided date is invalid.');
+            $fail('The provided date is invalid.');
+
             return;
         }
         $bookingTime = Carbon::parse($value);

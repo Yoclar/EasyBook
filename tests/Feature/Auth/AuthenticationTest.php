@@ -20,7 +20,7 @@ test('users can authenticate using the login screen', function () {
         'password' => 'password',
     ]);
 
-   $response->assertSee('Dashboard'); // vagy valami, ami a dashboardon van
+    $response->assertSee('Dashboard'); // vagy valami, ami a dashboardon van
 
     $this->assertAuthenticatedAs($user);
 });

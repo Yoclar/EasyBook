@@ -9,10 +9,10 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-
 class BookingControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     public function test_user_can_book_an_appointment()
     {
         $provider = ProviderProfile::factory()->create();
@@ -29,15 +29,13 @@ class BookingControllerTest extends TestCase
         ]);
 
         $response->assertRedirect();
-     
 
         $this->assertDatabaseCount('appointments', 1);
         $this->assertDatabaseHas('appointments', [
             'start_time' => $start->toDateTimeString(),
-            'end_time' => $end->toDateTimeString()
+            'end_time' => $end->toDateTimeString(),
         ]);
     }
-
 
     public function test_cannot_book_if_time_slot_taken()
     {
@@ -60,20 +58,16 @@ class BookingControllerTest extends TestCase
             'service_name' => 'Another Test',
             'start_time' => '2025-05-20 10:30:00',
             'end_time' => '2025-05-20 11:30:00',
-          
+
         ]);
 
         $response->assertRedirect();
-     
 
         $this->assertDatabaseCount('appointments', 1);
         $this->assertDatabaseHas('appointments', [
             'start_time' => $start->toDateTimeString(),
-            'end_time' => $end->toDateTimeString()
+            'end_time' => $end->toDateTimeString(),
         ]);
 
     }
 }
-
-
-

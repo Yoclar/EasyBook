@@ -3,25 +3,24 @@
 namespace Tests\Feature;
 
 use App\Models\Appointment;
-use App\Models\User;
 use App\Models\ProviderProfile;
+use App\Models\User;
 use Carbon\Carbon;
-use Tests\TestCase; 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
-
+use Tests\TestCase;
 
 class BookingApprovalAndDenial extends TestCase
 {
     use RefreshDatabase;
+
     public function test_booking_approval()
     {
         $user = User::factory()->create();
         $provider = ProviderProfile::factory()->create();
-        $this->actingAs($user); 
+        $this->actingAs($user);
 
         $appointment = Appointment::create([
-             'start_time' => Carbon::parse('2025-06-01 10:00'),
+            'start_time' => Carbon::parse('2025-06-01 10:00'),
             'end_time' => Carbon::parse('2025-06-01 11:00'),
             'user_id' => $user->id,
             'provider_id' => $provider->id,
@@ -33,16 +32,15 @@ class BookingApprovalAndDenial extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('appointments', [
             'id' => $appointment->id,
-            'status' => 'confirmed'
+            'status' => 'confirmed',
         ]);
     }
-
 
     public function test_booking_denial()
     {
         $user = User::factory()->create();
         $provider = ProviderProfile::factory()->create();
-        $this->actingAs($user); 
+        $this->actingAs($user);
 
         $appointment = Appointment::create([
             'start_time' => Carbon::parse('2025-06-01 10:00'),
@@ -57,9 +55,8 @@ class BookingApprovalAndDenial extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('appointments', [
             'id' => $appointment->id,
-            'status' => 'canceled'
+            'status' => 'canceled',
         ]);
-
 
     }
 }
