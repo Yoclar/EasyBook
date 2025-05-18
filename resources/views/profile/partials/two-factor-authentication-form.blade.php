@@ -22,7 +22,6 @@
         </div>
     </form>
 
-
     @if (auth()->user()->two_factor_secret)
         <div class="flex flex-col gap-4 mt-5">
             <h3 class="text-lg font-medium text-white">{{ __('QR Code for authenticator applications') }}</h3>

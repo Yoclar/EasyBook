@@ -19,11 +19,15 @@
                     @include('profile.partials.two-factor-authentication-form')
                 </div>
             </div>
-            <div class="p-4 sm:p-8 dark:bg-gray-800 shadow sm:rounded-lg">
+
+            @if(!$user->is_google_user)
+                 <div class="p-4 sm:p-8 dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
+            @endif
+           
         @if ($user->role === 'provider')
             <div class="p-4 sm:p-8 dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">

@@ -151,7 +151,7 @@ return [
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,
-            'confirmPassword' => fn ($user) => ! $user->is_google_user,
+            'confirmPassword' => false,
             // 'window' => 0,
         ]),
     ],

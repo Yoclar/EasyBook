@@ -53,7 +53,8 @@ class BookingController extends Controller
 
     public function store(Request $request, $id)
     {
-        try {
+     
+       // try {
             $validated = $request->validate([
                 'service_name' => ['required', 'string', 'max:25'],
                 'start_time' => ['required', 'date', new DateValidationForBookingRule],
@@ -140,7 +141,7 @@ class BookingController extends Controller
                     ) AS exists;
                 */
 
-            Appointment::create([
+            $appointment = Appointment::create([
                 'user_id' => auth()->user()->id,
                 'provider_id' => $id,
                 'start_time' => $start_time,
@@ -153,27 +154,27 @@ class BookingController extends Controller
                 'user_id' => auth()->id(),
                 'provider_id' => $id,
                 'service_name' => $validated['service_name'],
-                'start_time' => $start_time->toDateTimeString(),
-                'end_time' => $end_time->toDateTimeString(),
+                'start_time' => $appointment->start_time->toDateTimeString(),
+                'end_time' => $appointment->end_time->toDateTimeString(),
                 'booking_created_at' => now()->toDateTimeString(),
             ]);
             // !a tesztelés idejére kikommenteztem
             // Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
 
             return redirect()->route('booking.appointmentBookedInfo');
-        } catch (\Exception $e) {
+        /* } catch (\Exception $e) {
             Log::error('Error booking appointment', [
                 'error_message' => $e->getMessage(),
                 'user_id' => auth()->id(),
                 'provider_id' => $id,
-                'start_time' => $start_time->toDateTimeString(),
-                'end_time' => $end_time->toDateTimeString(),
+                'start_time' => isset($appointment) ? $appointment->start_time->toDateTimeString() : null,
+                'end_time' => isset($appointment) ? $appointment->end_time->toDateTimeString() : null,
                 'stack_trace' => $e->getTraceAsString(),
             ]);
             \Jeybin\Toastr\Toastr::error('An error occurred while booking your appointment. Please try again later.')->toast();
 
             return redirect()->back();
-        }
+        } */
 
     }
 

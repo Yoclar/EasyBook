@@ -14,7 +14,7 @@
         <div class="flex flex-col">
             <label class="flex items-center">
                 <input type="checkbox" name="google_calendar" value="1" {{ auth()->user()->using_google_calendar ? 'checked' : '' }} style="margin-right: 15px">
-                <span>Would you like us to automatically save your appointments to your Google Calendar?</span>
+                <span class="text-white">Would you like us to automatically save your appointments to your Google Calendar?</span>
             </label>
             <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 This will only happen if you give us permission.

@@ -9,6 +9,10 @@
             max-width: 900px;
             margin: 0 auto;
         }
+        .textcolor
+        {
+            color: white;
+        }
     </style>
     @php
     $imageUrl = asset('storage/profile_images/placeholder-profile-img.jpg'); // Alapértelmezett kép
@@ -20,7 +24,7 @@
     }
     @endphp
     <div class="d-flex justify-content-center mt-5">
-        <div class="card text-center shadow-lg p-4" style="width: 50rem;">
+        <div class="card text-center shadow-lg p-4 bg-gray-800" style="width: 50rem;">
             <img src="{{ $imageUrl }}" 
             class="card-img-top rounded-circle mx-auto mt-3" 
             style="width: 150px; height: 150px; object-fit: cover;">
@@ -35,14 +39,14 @@
                  style="width: 150px; height: 150px; object-fit: cover;"> --}}
     
             <div class="card-body">
-                <h1 class="display-6 card-title">{{ $provider->company_name }}</h1>
-                <p class="card-text">{{ $provider->description }}</p>
+                <h1 class="display-6 card-title textcolor">{{ $provider->company_name }}</h1>
+                <p class="card-text textcolor">{{ $provider->description }}</p>
                 
                 <!-- Location (kikapcsolható) -->
-                <p class="text-muted"><i class="bi bi-geo-alt"></i>{{ $provider->address }}</p>
+                <p class="text-muted textcolor"><i class="bi bi-geo-alt"></i>{{ $provider->address }}</p>
     
                 <!-- Webpage (kikapcsolható) -->
-               <p><a href="{{ $provider->website }}" target="self" class="btn btn-link">Visit Website</a></p>
+               <p><a href="{{ $provider->website }}" target="self" class="btn btn-link textcolor">Visit Website</a></p>
     
                 <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Book Now</button>
                 <!-- Modal -->

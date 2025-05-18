@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
     </x-slot>
+    
     @if($role === 'provider')
         <div class="container mt-4">
             <div class="card shadow-sm">

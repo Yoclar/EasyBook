@@ -22,7 +22,7 @@
 
     <div class="mb-4">
         <x-input-label for="description" :value="__('Description')" />
-        <textarea id="description" name="description" class="mt-1 block w-full">{{ old('description', $providerProfile->description ?? '') }}</textarea>
+        <textarea id="description" name="description" class="mt-1 block w-full text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('description', $providerProfile->description ?? '') }}</textarea>
         <x-input-error class="mt-2" :messages="$errors->get('description')" />
     </div>
 

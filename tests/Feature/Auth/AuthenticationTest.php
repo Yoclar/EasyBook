@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -9,19 +10,26 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'password' => bcrypt('password'),
+        'two_factor_secret' => null,
+    ]);
 
-    $response = $this->post('/login', [
+    $response = $this->followingRedirects()->post('/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+   $response->assertSee('Dashboard'); // vagy valami, ami a dashboardon van
+
+    $this->assertAuthenticatedAs($user);
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'password' => Hash::make('password'),
+        'two_factor_secret' => null,
+    ]);
 
     $this->post('/login', [
         'email' => $user->email,
@@ -32,7 +40,10 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'password' => Hash::make('password'),
+        'two_factor_secret' => null,
+    ]);
 
     $response = $this->actingAs($user)->post('/logout');
 

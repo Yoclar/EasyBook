@@ -11,8 +11,9 @@
                 <div class="ms-auto">
                     <form action="{{ route('index') }}" method="GET">
                         @csrf
-                        <label class="text-white" for="search">Search: </label>
-                        <input type="text" name="search" id="search"></div>
+                        <label class="text-white " for="search">Search: </label>
+                        <input type="text" class="mt-1 block text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md" name="search" id="search">
+                </div>
                     </form>
             </div>
             @foreach ($providers as $provider)

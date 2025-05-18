@@ -16,9 +16,14 @@ class DateValidationForBookingRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $now = Carbon::now();
+        try {
+            $bookingTime = Carbon::parse($value);
+        } catch (\Exception $e) {
+             $fail('The provided date is invalid.');
+            return;
+        }
         $bookingTime = Carbon::parse($value);
         if ($bookingTime->lessThan($now)) {
-            \Jeybin\Toastr\Toastr::error('You cannot book for past time.')->timeOut(5000)->toast();
             $fail('You cannot book for past time.');
         }
     }

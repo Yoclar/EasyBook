@@ -25,7 +25,16 @@
     @endphp
   <h3 class="text-center text-white"><span id="countdown" data-start="{{ $start_time ? $start_time->format('Y-m-d H:i:s') : '' }}"></span></h3>
     @if($unconfirmedBooking)
-        <h3 class="text center text-white">You have unconfirmed booking</h3>
+        <div class="text-center">
+         <h3 style="font-family:cursive" class="text-white">
+            <a href="/mybookings" class="underline text-blue-300 hover:text-blue-500">
+                You have unconfirmed booking – click here to view
+            </a>
+        </h3>
+
+            
+        </div>
+        
     @endif
 
     <script>
