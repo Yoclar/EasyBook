@@ -158,8 +158,8 @@ class BookingController extends Controller
             'end_time' => $appointment->end_time->toDateTimeString(),
             'booking_created_at' => now()->toDateTimeString(),
         ]);
-        // !a tesztelés idejére kikommenteztem
-        // Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
+
+        Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
 
         return redirect()->route('booking.appointmentBookedInfo');
         } catch (\Exception $e) {

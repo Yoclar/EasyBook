@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationSuccessful; 
 
 class RegisterController extends Controller
 {
@@ -92,7 +94,7 @@ class RegisterController extends Controller
 
         session()->forget('registration_role');
         \Jeybin\Toastr\Toastr::success('Registration successful')->toast();
-
+        Mail::to($user->email)->send(new RegistrationSuccessful($user->name));
         return redirect(route('dashboard'));
     }
 

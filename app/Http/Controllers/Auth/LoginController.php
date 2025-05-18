@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationSuccessful;
 
 class LoginController extends Controller
 {
@@ -89,6 +91,8 @@ class LoginController extends Controller
                 }
 
                 Auth::login($newUser);
+                Mail::to($newUser->email)->send(new RegistrationSuccessful($newUser->name));
+
             }
             if ($role == 'provider') {
                 \Jeybin\Toastr\Toastr::info('Please edit your profile details')->timeOut(5000)->toast();

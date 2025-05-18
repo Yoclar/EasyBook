@@ -7,6 +7,7 @@ use App\Services\GoogleCalendarService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentAccepted;
 
 class BookingManagementController extends Controller
 {
@@ -113,8 +114,8 @@ class BookingManagementController extends Controller
                 ]);
 
             }
-            // !tesztelés alatt
-            // Mail::to($appointment->user->email)->send(new AppointmentAccepted($appointment->provider->company_name, $appointment->start_time, $appointment->end_time));
+
+            Mail::to($appointment->user->email)->send(new AppointmentAccepted($appointment->provider->company_name, $appointment->start_time, $appointment->end_time));
             \Jeybin\Toastr\Toastr::success('Appointment confirmed.')->toast();
             Log::info('Appointment confirmed successfully', [
                 'user_id' => auth()->id(),
