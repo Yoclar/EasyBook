@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentAccepted;
 use App\Models\Appointment;
 use App\Services\GoogleCalendarService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AppointmentAccepted;
 
 class BookingManagementController extends Controller
 {

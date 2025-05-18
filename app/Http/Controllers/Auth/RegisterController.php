@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegistrationSuccessful;
 use App\Models\ProviderProfile;
 use App\Models\User;
 use App\Models\WorkingHour;
@@ -12,9 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\RegistrationSuccessful; 
+use Illuminate\Validation\Rules;
 
 class RegisterController extends Controller
 {
@@ -30,8 +30,7 @@ class RegisterController extends Controller
         }
         $allowedRoles = ['customer', 'provider'];
         $role = $request->query('role', 'customer');
-        if(!in_array($role, $allowedRoles))
-        {
+        if (! in_array($role, $allowedRoles)) {
             abort(400, 'invalid role');
         }
         session(['registration_role' => $role]);
@@ -95,6 +94,7 @@ class RegisterController extends Controller
         session()->forget('registration_role');
         \Jeybin\Toastr\Toastr::success('Registration successful')->toast();
         Mail::to($user->email)->send(new RegistrationSuccessful($user->name));
+
         return redirect(route('dashboard'));
     }
 

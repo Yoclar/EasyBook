@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegistrationSuccessful;
 use App\Models\ProviderProfile;
 use App\Models\User;
 use App\Models\WorkingHour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\RegistrationSuccessful;
 
 class LoginController extends Controller
 {
@@ -26,7 +26,7 @@ class LoginController extends Controller
     {
         $allowedRoles = ['customer', 'provider'];
         $role = $request->query('role');
-        if(!in_array($role, $allowedRoles)){
+        if (! in_array($role, $allowedRoles)) {
             abort(400, 'Invalid role');
         }
         session(['role' => $role]);

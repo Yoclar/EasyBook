@@ -24,7 +24,6 @@ test('email can be verified', function () {
         ['id' => $user->id]
     );
 
-
     $response = $this->actingAs($user)->get($verificationUrl);
 
     Event::assertDispatched(Verified::class);
@@ -35,7 +34,7 @@ test('email can be verified', function () {
 test('email is not verified with invalid hash', function () {
     $user = User::factory()->unverified()->create();
 
-       $verificationUrl = URL::temporarySignedRoute(
+    $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),
         ['id' => $user->id]
