@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class BookingApprovalAndDenial extends TestCase
+class BookingApprovalAndDenialTest extends TestCase
 {
     use RefreshDatabase;
 

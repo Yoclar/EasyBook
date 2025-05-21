@@ -48,10 +48,16 @@
             <div class="flex-1 border-t border-gray-300"></div>
         </div>
         
-        <a href="{{ route('login.google') }}" 
-           class="mt-4 flex items-center justify-center w-full border border-gray-300 text-white py-2 rounded-lg shadow-sm hover:shadow-md transition">
-            <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5 mr-2" style="margin-right:12px" alt="Google logo">
-            Continue with Google
+        <a href="{{ route('login.google', ['role' => 'provider']) }}"
+            class="mt-4 flex items-center justify-center w-full border border-gray-300 text-white py-2 rounded-lg shadow-sm hover:shadow-md transition">
+            <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5 mr-2" alt="Google logo">
+            Google login as provider
+        </a>
+
+        <a href="{{ route('login.google', ['role' => 'customer']) }}"
+            class="mt-4 flex items-center justify-center w-full border border-gray-300 text-white py-2 rounded-lg shadow-sm hover:shadow-md transition">
+            <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5 mr-2" alt="Google logo">
+            Google login as customer
         </a>
     </form>
 </x-guest-layout>

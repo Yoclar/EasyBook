@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AppointmentBooked;
+use App\Mail\AppointmentBookedProvider;
 use App\Models\Appointment;
 use App\Models\ProviderProfile;
 use App\Models\WorkingHour;
@@ -158,9 +159,11 @@ class BookingController extends Controller
                 'end_time' => $appointment->end_time->toDateTimeString(),
                 'booking_created_at' => now()->toDateTimeString(),
             ]);
+            $providerprofile = ProviderProfile::where('id', $id)->firstOrFail();
+            $providerUser = $providerprofile->user;
 
             Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
-
+            Mail::to($providerUser->email)->send(new AppointmentBookedProvider($providerUser->name, $start_time, $end_time));
             return redirect()->route('booking.appointmentBookedInfo');
         } catch (\Exception $e) {
             Log::error('Error booking appointment', [
