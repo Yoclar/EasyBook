@@ -164,6 +164,7 @@ class BookingController extends Controller
 
             Mail::to(auth()->user()->email)->send(new AppointmentBooked(auth()->user()->name, ProviderProfile::where('id', $id)->value('company_name'), $start_time, $end_time));
             Mail::to($providerUser->email)->send(new AppointmentBookedProvider($providerUser->name, $start_time, $end_time));
+
             return redirect()->route('booking.appointmentBookedInfo');
         } catch (\Exception $e) {
             Log::error('Error booking appointment', [

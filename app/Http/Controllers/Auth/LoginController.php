@@ -28,6 +28,7 @@ class LoginController extends Controller
         $role = $request->query('role');
         if (! in_array($role, $allowedRoles)) {
             \Jeybin\Toastr\Toastr::error('Invalid role')->timeOut(5000)->toast();
+
             return redirect()->back();
         }
         session(['role' => $role]);

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -36,7 +35,7 @@ class AppointmentBookedProvider extends Mailable
      */
     public function content(): Content
     {
-          return new Content(
+        return new Content(
             markdown: 'emails.appointments.bookedProvider',
             with: [
                 'name' => $this->name,

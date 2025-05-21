@@ -21,6 +21,7 @@ class WelcomeController extends Controller
         Mail::to('laravelmybeloved@gmail.com')->send(new ContactUs($validated['name'], $validated['email'], $validated['subject'], $validated['message']));
         Log::info('Email sent to support', ['email' => $validated['email']]);
         \Jeybin\Toastr\Toastr::success('Your eamail sent successfully.')->timeOut(5000)->toast();
+
         return redirect()->back();
     }
 }
