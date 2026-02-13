@@ -1,7 +1,8 @@
 # EasyBook – Appointment Booking Application
 
 ### 📌 Short Description
-    EasyBook is a modern appointment management application where users can register either as **customers** or **providers**. Customers can browse available providers and book appointments, while providers can manage their working hours and synchronize their schedule with Google Calendar for reminders and notifications.
+
+EasyBook is a modern appointment management application where users can register either as **customers** or **providers**. Customers can browse available providers and book appointments, while providers can manage their working hours and synchronize their schedule with Google Calendar for reminders and notifications.
 ---
  ### 🚀 Key Features
   - Register as a **customer** or **provider** 
